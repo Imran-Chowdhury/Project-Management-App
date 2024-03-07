@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "625529592856",
+    "project_id": "project-management-app-cfb84",
+    "storage_bucket": "project-management-app-cfb84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625529592856:android:3525c546354dadf141f76d",
+        "android_client_info": {
+          "package_name": "com.example.project_management_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_fu9ZF98SIvbrEiHS_Qz7j9O7Fo_q2Ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
