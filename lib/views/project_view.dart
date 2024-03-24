@@ -7,7 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectScreen extends ConsumerWidget {
-  const ProjectScreen({super.key});
+
+
+
+   ProjectScreen({super.key, required this.projectName});
+
+  String projectName;
+
 
  
 
@@ -20,10 +26,10 @@ class ProjectScreen extends ConsumerWidget {
         body: Column(
           children: [
            const  SizedBox(height: 10.0,),
-            const Center(
+            Center(
               child: Text(
-                'Project Name',
-                style: TextStyle(
+                projectName,
+                style: const TextStyle(
                   fontSize: 30.0,
                 ),
               ),

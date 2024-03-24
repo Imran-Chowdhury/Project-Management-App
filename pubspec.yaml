@@ -40,6 +40,7 @@ dependencies:
   carousel_slider: ^4.2.1
   cloud_firestore: ^4.15.6
   firebase_core: ^2.25.5
+  shared_preferences: ^2.2.2
   
   
 
