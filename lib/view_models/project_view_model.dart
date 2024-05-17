@@ -25,6 +25,10 @@ class ProjectViewModelNotifier extends StateNotifier<BaseState>{
  Future<List<Project>> saveOrUpdateJsonInSharedPreferences(int id, String title,String date , String description) async{
     state = const LoadingState();
 
+   Future.delayed(const Duration(seconds: 5), () {
+  print('Five second has passed.'); // Prints after 1 second.
+});
+
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     // const String title = 'My Project';
@@ -35,7 +39,7 @@ class ProjectViewModelNotifier extends StateNotifier<BaseState>{
     try{
 
    // Check if the file exists
-    if (prefs.containsKey(fileName)) {
+    if (prefs.containsKey(fileName)) { 
       final String? jsonString = prefs.getString(fileName);
       List<dynamic> fileContent = json.decode(jsonString!);
 
@@ -47,11 +51,24 @@ class ProjectViewModelNotifier extends StateNotifier<BaseState>{
         print('The project already exists');
       } else {
         // Add new project to existing content
+        
         fileContent.add({
           'Project title': title,
           'Description': description,
           'Date of Creation': date,
-          'Tasks': [],
+          // 'Tasks': [],
+          'Tasks': [{
+            'Task Title' : 'Test task',
+            'Date of Creation': 'put one date here',
+          },
+
+          //  {
+          //   'Task Title' : 'Test task2',
+          //   'Date of Creation': 'put one date hereeeee',
+          // },
+
+          ],
+
           'Id':id,
         });
         // Save updated content back
@@ -67,7 +84,16 @@ class ProjectViewModelNotifier extends StateNotifier<BaseState>{
           'Project title': title,
           'Description': description,
           'Date of Creation': date,
-          'Tasks': [],
+          // 'Tasks': [],
+              'Tasks': [{
+            'Task Title' : 'Test task',
+            'Date of Creation': 'put one date here',
+          },
+          // {
+          //   'Task Title' : 'Test task2',
+          //   'Date of Creation': 'put one date hereeeee',
+          // },
+          ],
           'Id':id,
         }
       ];

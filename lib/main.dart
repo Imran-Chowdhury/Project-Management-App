@@ -27,21 +27,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
@@ -50,3 +35,119 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// // Define a task model
+// class Task {
+//   final String name;
+
+//   Task(this.name);
+// }
+
+// // Define a state class for tasks
+// class TaskState {
+//   final List<Task> tasks;
+
+//   TaskState(this.tasks);
+// }
+
+// // Define a state notifier for managing tasks
+// class TaskNotifier extends StateNotifier<TaskState> {
+//   TaskNotifier(List<Task> tasks) : super(TaskState(tasks));
+
+//   void addTask(Task task) {
+//     state = TaskState([...state.tasks, task]);
+//   }
+// }
+
+// // Define providers
+// final taskProvider = StateNotifierProvider<TaskNotifier, TaskState>((ref) {
+//   return TaskNotifier([]);
+// });
+
+// void main() {
+//   runApp(
+//     ProviderScope(
+//       child: MaterialApp(
+//         home: FirstScreen(),
+//       ),
+//     ),
+//   );
+// }
+
+// class FirstScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('First Screen'),
+//       ),
+//       body: ListView(
+//         children: [
+//           ListTile(
+//             title: Text('Eat'),
+//             onTap: () {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                   builder: (context) => SecondScreen(tasks: [Task('Eat')]),
+//                 ),
+//               );
+//             },
+//           ),
+//           ListTile(
+//             title: Text('Sleep'),
+//             onTap: () {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                   builder: (context) => SecondScreen(tasks: [Task('Sleep')]),
+//                 ),
+//               );
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class SecondScreen extends ConsumerWidget {
+//   final List<Task> tasks;
+
+//   SecondScreen({required this.tasks});
+
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final taskState = ref.watch(taskProvider);
+//     final taskController  = ref.watch(taskProvider.notifier);
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Second Screen'),
+//       ),
+//       body: ListView.builder(
+//         itemCount: tasks.length,
+//         itemBuilder: (context, index) {
+//           return ListTile(
+//             title: Text(tasks[index].name),
+//           );
+//         },
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () {
+//           final newTask = Task('Walk');
+//           ref.watch(taskProvider.notifier).addTask(newTask);
+//         },
+//         child: Icon(Icons.add),
+//       ),
+//     );
+//   }
+
+
+
+// }

@@ -1,6 +1,8 @@
 
 
 
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -8,9 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:project_management_app/base_state/base_state.dart';
 import 'package:project_management_app/models/project_model/project_model.dart';
+import 'package:project_management_app/models/task_model/task_model.dart';
 
 import 'package:project_management_app/view_models/project_view_model.dart';
 import 'package:project_management_app/views/project_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -388,7 +392,58 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
 
- 
+   List<Project> projectList = [];
+   String fileName = 'project_file';
+
+  Future< void> readMapFromSharedPreferences(String nameOfJsonFile) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final  String fileName = nameOfJsonFile;
+    List<Project> allProjects = [];
+
+    try{
+      // state = const LoadingState();
+        // Check if the file exists
+        if (prefs.containsKey(fileName)) {
+          final String? jsonString = prefs.getString(fileName);
+          List<dynamic> fileContent = json.decode(jsonString!);
+          // print(fileContent);
+
+          // Print all project data
+          for (var projectMap in fileContent) {
+            
+
+
+          allProjects.add(Project.fromjson(projectMap)); 
+
+
+            print('ID: ${projectMap['Id']}'); 
+            print('Project Title: ${projectMap['Project title']}');
+            print('Date of Creation: ${projectMap['Date of Creation']}');
+            print('Tasks: ${projectMap['Tasks']}');
+            print('\n');
+        
+            
+          }
+          // state = SuccessState(data: allProjects);
+        } else {
+          print('No projects found.');
+        }
+    }
+    catch(error){
+        // state = const ErrorState('An error occured while getting the projects');
+        rethrow; 
+      }
+
+      setState(() {
+         projectList = allProjects;
+      });
+
+
+       
+      // return  allProjects;
+
+
+  }
   
 
 
@@ -399,6 +454,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     //  final projectState = ref.read( projectViewModelProvider);
     //  final projectController = ref.watch( projectViewModelProvider.notifier);
      print('this is initstate');
+    readMapFromSharedPreferences(fileName);
 
   }
 
@@ -413,7 +469,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
      final projectState = ref.watch( projectViewModelProvider);
      final projectController = ref.watch( projectViewModelProvider.notifier);
-     final projectList = [];
+
 
     DateTime now = DateTime.now();
 
@@ -425,7 +481,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
      body: Padding(
        padding: const EdgeInsets.all(20.0),
-       child: Stack(
+       child: (projectState is LoadingState) ? 
+       const Center(
+                child: CircularProgressIndicator(),
+              )  :    Stack(
          children: [
           Column(
          children: [
@@ -452,14 +511,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
            const SizedBox(height: 20.0,),
          
            headings('Projects'),
+
+
          
 
-            if(projectState is  SuccessState) 
-                  //  projectState.data,
-                  horizontalSlider(projectState.data),
-         
-            // projectState==LoadingState? const Center(child: CircularProgressIndicator(),): horizontalSlider(projectState),
-          
+            // if(projectState is  SuccessState) 
+            //       //  projectState.data,
+            //       horizontalSlider(projectState.data),
+
+
+                  (projectState is SuccessState)?horizontalSlider(projectState.data): horizontalSlider(projectList ),
+        
+            
          
          
            
@@ -488,6 +551,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
         ],
        ),
+       
     ),
 
 
@@ -603,13 +667,14 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, final projectContr
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       // Validation passed, proceed with saving
-                      int id = 1;
                       DateTime now = DateTime.now();
+                      int id = now.millisecondsSinceEpoch;
+                
                       String formattedDate = DateFormat('dd MMM yyyy').format(now);
                       String title = titleController.text;
                       String description = descriptionController.text;
                       // Perform save operation or any other logic here
-                    projectController.saveOrUpdateJsonInSharedPreferences(id, title, formattedDate ,  description);
+                      projectController.saveOrUpdateJsonInSharedPreferences(id, title, formattedDate, description);
                     
                     
 
@@ -630,16 +695,36 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, final projectContr
 }
 
 
-Widget horizontalSlider(  List<Project> projectsList){
+Widget horizontalSlider( List<Project> projectsList){
   return  CarouselSlider.builder(
         itemCount: projectsList.length,
         itemBuilder: (BuildContext context, int index, int realIndex) {
           return GestureDetector(
-            onTap: (){
+            onTap: (){      
+
+              List<Task>? taskList = [];   
+
+             if (projectsList[index].tasks != null && projectsList[index].tasks!.isNotEmpty) {
+              print('the lenght of the tasks ${projectsList[index].tasks!.length}');
+           
+
+              int taskLen = projectsList[index].tasks!.length;
+
+              for(int i = 0; i<taskLen; i++){
+
+                  Map<String, dynamic> taskMap = projectsList[index].tasks![i];
+                  print(taskMap);
+                  
+                  taskList.add(Task.fromjson(taskMap));
+                }
+              }
+            
 
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  ProjectScreen(projectName:projectsList[index].name ,)),
+                MaterialPageRoute(builder: (context) =>  ProjectScreen(
+                  projectName:projectsList[index].name,
+                  taskList: taskList,)),
               );
             },
 
@@ -704,32 +789,32 @@ Widget todayTaskList(){
 
 
 
-Widget headings(String projectOrTask) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 5.0),
-        child: Text(
-         projectOrTask,
-          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(right: 10.0),
-        child: GestureDetector(
-          onTap: () {
-            // Navigate to see all page or perform desired action
-          },
-          child: const Text(
-            'See all',
-            style: TextStyle(color: Colors.blue, fontSize: 16.0),
-          ),
-        ),
-      ),
-    ],
-  );
-}
+// Widget headings(String projectOrTask) {
+//   return Row(
+//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     children: [
+//       Padding(
+//         padding: const EdgeInsets.only(left: 5.0),
+//         child: Text(
+//          projectOrTask,
+//           style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+//         ),
+//       ),
+//       Padding(
+//         padding: const EdgeInsets.only(right: 10.0),
+//         child: GestureDetector(
+//           onTap: () {
+//             // Navigate to see all page or perform desired action
+//           },
+//           child: const Text(
+//             'See all',
+//             style: TextStyle(color: Colors.blue, fontSize: 16.0),
+//           ),
+//         ),
+//       ),
+//     ],
+//   );
+// }
 }
 
 

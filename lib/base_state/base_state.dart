@@ -1,4 +1,6 @@
 
+import 'package:project_management_app/models/task_model/task_model.dart';
+
 abstract class BaseState{
   const BaseState();
 }
@@ -26,3 +28,37 @@ class ErrorState extends BaseState {
 
   const ErrorState(this.errorMessage);
 }
+
+
+
+
+
+
+class TaskInitialState extends BaseState{
+        const TaskInitialState();
+}
+
+
+
+class TaskLoadingState<T> extends BaseState{
+  const TaskLoadingState({this.data, this.nameOfProject});
+
+  final String? nameOfProject;
+  final T? data;
+}
+
+class TaskSuccessState<T> extends BaseState{
+  const TaskSuccessState({this.data, this.message,this.nameOfProject});
+
+  final T? data;
+  final T? message;
+  final String? nameOfProject;
+}
+
+class TaskErrorState extends BaseState {
+  final String errorMessage;
+  final String? nameOfProject;
+
+  const TaskErrorState(this.errorMessage,{this.nameOfProject});
+}
+

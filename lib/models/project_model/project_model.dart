@@ -13,7 +13,8 @@ class Project {
   final String name;
   final String description;
   // final List<Task>? tasks;
-   final List? tasks;
+  // final List<Map<String, dynamic>>? tasks;
+  final List<dynamic>? tasks;
   final String date;
 
   Project({required this.id, required this.name, required this.tasks, required this.description, required this.date });
