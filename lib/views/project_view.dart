@@ -10,77 +10,80 @@ import 'package:project_management_app/base_state/base_state.dart';
 import 'package:project_management_app/models/task_model/task_model.dart';
 import 'package:project_management_app/view_models/task_view_model.dart';
 
-class ProjectScreen extends ConsumerWidget {
 
-
-
-   ProjectScreen({super.key, required this.projectName,required this.projectId,required this.taskList});
+class ProjectScreen extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<ProjectScreen> createState() => _ProjectScreenState();
+  ProjectScreen({super.key, required this.projectName,required this.projectId});
 
   String projectName;
   int projectId;
-  List<Task>? taskList;
+  List<Task> taskList = [];
+}
 
-  
+// 2. extend [ConsumerState]
+class _ProjectScreenState extends ConsumerState<ProjectScreen> {
+  @override
+  void initState() {
+    super.initState();
 
-
+    getTasks();
+  }
+  Future<void> getTasks()async{
+    print('bambam');
+    final taskController =  ref.read(taskViewModelProvider(widget.projectId).notifier);
+    widget.taskList = await taskController.getTasks(widget.projectId.toString());
+    print(widget.taskList);
+  }
 
 
   @override
-
-  Widget build(BuildContext context, WidgetRef ref) {
-
-    var taskState = ref.watch(taskViewModelProvider(projectName));
-    TaskViewModelNotifier taskController = ref.watch(taskViewModelProvider(projectName).notifier);
-    //  DateTime now = DateTime.now();
-    List<Task>? listOfTasks = taskList;
-
-
-    if(taskState is TaskSuccessState){
-      taskList = taskState.data;
-    }
-
-    // String formattedDate = DateFormat('dd MMM yyyy').format(now);
+  Widget build(BuildContext context) {
+    var taskState = ref.watch(taskViewModelProvider(widget.projectId));
+    TaskViewModelNotifier taskController = ref.watch(taskViewModelProvider(widget.projectId).notifier);
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-
-  return SafeArea(
-    child: Scaffold(
-      body: Stack( // Wrap the Column with a Stack
-        children: [
-          Column(
-            children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: Center(
-                  child: Text(
-                    projectName,
-                    style: const TextStyle(
-                      fontSize: 30.0,
+    // 4. use ref.watch() to get the value of the provider
+    // final helloWorld = ref.watch(helloWorldProvider);
+    return SafeArea(
+      child: Scaffold(
+        body: Stack( // Wrap the Column with a Stack
+          children: [
+            Column(
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Center(
+                    child: Text(
+                      widget.projectName,
+                      style: const TextStyle(
+                        fontSize: 30.0,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            // (taskState is TaskSuccessState&&taskState.nameOfProject == projectName)?tasks(taskState.data): tasks(taskList),
-            (taskState is TaskSuccessState)?tasks(taskState.data): tasks(taskList),
-          //  tasks(taskList),
+                // (taskState is TaskSuccessState&&taskState.nameOfProject == projectName)?tasks(taskState.data): tasks(taskList),
+                (taskState is TaskSuccessState)?tasks(taskState.data): tasks(widget.taskList),
+                //  tasks(taskList),
 
-            ],
-          ),
-          Positioned(
-            bottom: 16.0,
-            right: 20.0,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: add(context, formKey, taskController, taskList,projectName),
+              ],
+            ),
+            Positioned(
+              bottom: 16.0,
+              right: 20.0,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: add(context, formKey, taskController, widget.taskList,widget.projectName),
               ),
             ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-  
-Widget add(BuildContext context,GlobalKey<FormState> formKey, TaskViewModelNotifier  taskController,  List<Task>? taskList, String projectTitle){
+    );
+  }
+
+
+  Widget add(BuildContext context,GlobalKey<FormState> formKey, TaskViewModelNotifier  taskController,  List<Task>? taskList, String projectTitle){
     return  FloatingActionButton(
       backgroundColor: Colors.pinkAccent,
       shape: const CircleBorder(),
@@ -104,7 +107,7 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, TaskViewModelNotif
                       controller: titleController,
                       decoration: const InputDecoration(
                         hintText: 'Enter Task',
-                      ), 
+                      ),
                       validator: (value) {
 
                         if (value!.isEmpty) {
@@ -144,33 +147,25 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, TaskViewModelNotif
                 //   },
                 //   child: const Text('Delete the file'),
                 // ),
-                
+
                 TextButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       // Validation passed, proceed with saving
-                      // int id = 1;
-                      DateTime now = DateTime.now();
-                      String formattedDate = DateFormat('dd MMM yyyy').format(now);
-                      // String title = titleController.text;
-                      // String description = descriptionController.text;
-
-                      String title = titleController.text;
-                      // Perform save operation or any other logic here
-                      taskController.addTaskToProject(taskList, projectTitle,  {
-                        // 'taskTitle': title,
-      
-                        //  'date': formattedDate,
-
-                         'Task Title': title,
-      
-                         'Date of Creation': formattedDate,
-                      });
-                    
-                    
 
 
-                      // print('Title: $title, Description: $description, Date: $formattedDate');
+
+                      String title = titleController.text.trim();
+
+
+                      Map<String, dynamic> newTask = {
+                        "task_name": title,
+                        "completed": false
+                      };
+
+
+                      taskController.addTask(widget.taskList, newTask,widget.projectId.toString());
+
                       Navigator.of(context).pop();
                     }
                   },
@@ -183,35 +178,37 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, TaskViewModelNotif
       },
       child: const Icon(Icons.add),
     );
-}
+  }
 
 
-Widget tasks(List<Task>? taskList){
-  // print(taskList!.length);
-  return taskList!.isNotEmpty? Expanded(
-         child: ListView.builder(
-          itemCount: taskList.length, // Number of items
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              child: Container(
-                height: 50, // Adjust height as needed
-                decoration: BoxDecoration(
+  Widget tasks(List<Task> taskList){
+    // print(taskList!.length);
+    return taskList.isNotEmpty? Expanded(
+      child: ListView.builder(
+        itemCount: taskList.length, // Number of items
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Container(
+              height: 50, // Adjust height as needed
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 color: Colors.blue,
               ),
-                margin: const EdgeInsets.all(5), // Add margin for spacing
-                alignment: Alignment.center,
-                child: Text(
-                  taskList[index].taskTitle,
-                  // 'Item ${index + 1}',
-                  style: const TextStyle(color: Colors.white, fontSize: 18),
-                ),
+              margin: const EdgeInsets.all(5), // Add margin for spacing
+              alignment: Alignment.center,
+              child: Text(
+                taskList[index].taskTitle,
+                // 'Item ${index + 1}',
+                style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
-            );
-          },
-               ),
-       ):const Center(child: Text('No data'),);
+            ),
+          );
+        },
+      ),
+    ):const Center(child: Text('Add a task'),);
+  }
 }
 
 
-}
+
+

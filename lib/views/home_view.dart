@@ -107,7 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
            (projectState is SuccessState)?horizontalSlider(projectState.data): horizontalSlider(projectList ),
 
-          
+
 
          
 
@@ -250,41 +250,32 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNo
                   },
                   child: const Text('Cancel'),
                 ),
-                TextButton(
-                  onPressed: () {
-                    projectController.deleteFileFromSharedPreferences('project_file');
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Delete the file'),
-                ),
+                // TextButton(
+                //   onPressed: () {
+                //     projectController.deleteFileFromSharedPreferences('project_file');
+                //     Navigator.of(context).pop();
+                //   },
+                //   child: const Text('Delete the file'),
+                // ),
                 
                 TextButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       // Validation passed, proceed with saving
-                      // DateTime now = DateTime.now();
-                      // int id = now.millisecondsSinceEpoch;
-                      // String formattedDate = DateFormat('dd MMM yyyy').format(now);
 
 
-                      String title = titleController.text;
-                      String description = descriptionController.text;
+
+                      String title = titleController.text.trim();
+                      String description = descriptionController.text.trim();
 
                       Map<String,dynamic> newProject = {
                         "project_name" : title,
                         "description": description,
                       };
-                      // Perform save operation or any other logic here
-                      // projectController.saveOrUpdateJsonInSharedPreferences(id, title, formattedDate, description);
-                      // if(projectState is SuccessState){
-                      //    list = projectState.data;
-                      // }
+
 
                       projectController.addProject(list, newProject);
-                    
 
-
-                      // print('Title: $title, Description: $description, Date: $formattedDate');
                       Navigator.of(context).pop();
                     }
                   },
@@ -322,9 +313,7 @@ Widget horizontalSlider( List<Project> projectsList){
                 MaterialPageRoute(builder: (context) =>  ProjectScreen(
                   projectName:listOfProjects[index].name,
                   projectId: listOfProjects[index].id,
-                  // projectName:projectsList[index].name,
-                  // projectId: projectsList[index].id,
-                  taskList: taskList,)),
+                  )),
               );
             },
 
