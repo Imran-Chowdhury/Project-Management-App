@@ -14,9 +14,10 @@ class ProjectScreen extends ConsumerWidget {
 
 
 
-   ProjectScreen({super.key, required this.projectName,required this.taskList});
+   ProjectScreen({super.key, required this.projectName,required this.projectId,required this.taskList});
 
   String projectName;
+  int projectId;
   List<Task>? taskList;
 
   

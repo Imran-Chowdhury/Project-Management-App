@@ -14,10 +14,10 @@ class Project {
   final String description;
   // final List<Task>? tasks;
   // final List<Map<String, dynamic>>? tasks;
-  final List<dynamic>? tasks;
+  // final List<dynamic>? tasks;
   final String date;
 
-  Project({required this.id, required this.name, required this.tasks, required this.description, required this.date });
+  Project({required this.id, required this.name,  required this.description, required this.date });
 
 
 
@@ -25,11 +25,11 @@ class Project {
 
     return Project(
 
-      id: projectJson['Id'], 
-      name:  projectJson['Project title'], 
-      tasks:  projectJson['Tasks'],
-      description: projectJson['Description'],
-      date: projectJson['Date of Creation'],
+      id: projectJson['id'],
+      name:  projectJson['project_name'],
+      // tasks:  projectJson['Tasks'],
+      description: projectJson['description'],
+      date: projectJson['created_on'],
 
 
       );
