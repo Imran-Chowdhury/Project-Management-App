@@ -29,10 +29,13 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
 
     getTasks();
   }
-  Future<void> getTasks()async{
+
+  Future<void> getTasks() async {
     print('bambam');
-    final taskController =  ref.read(taskViewModelProvider(widget.projectId).notifier);
-    widget.taskList = await taskController.getTasks(widget.projectId.toString());
+    final taskController = ref.read(
+        taskViewModelProvider(widget.projectId).notifier);
+    widget.taskList =
+    await taskController.getTasks(widget.projectId.toString());
     print(widget.taskList);
   }
 
@@ -40,7 +43,8 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
   @override
   Widget build(BuildContext context) {
     var taskState = ref.watch(taskViewModelProvider(widget.projectId));
-    TaskViewModelNotifier taskController = ref.watch(taskViewModelProvider(widget.projectId).notifier);
+    TaskViewModelNotifier taskController = ref.watch(
+        taskViewModelProvider(widget.projectId).notifier);
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     // 4. use ref.watch() to get the value of the provider
@@ -63,7 +67,8 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                   ),
                 ),
                 // (taskState is TaskSuccessState&&taskState.nameOfProject == projectName)?tasks(taskState.data): tasks(taskList),
-                (taskState is TaskSuccessState)?tasks(taskState.data): tasks(widget.taskList),
+                (taskState is TaskSuccessState) ? tasks(taskState.data,taskController) : tasks(
+                    widget.taskList,taskController),
                 //  tasks(taskList),
 
               ],
@@ -73,7 +78,8 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
               right: 20.0,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: add(context, formKey, taskController, widget.taskList,widget.projectName),
+                child: add(context, formKey, taskController, widget.taskList,
+                    widget.projectName),
               ),
             ),
           ],
@@ -83,8 +89,10 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
   }
 
 
-  Widget add(BuildContext context,GlobalKey<FormState> formKey, TaskViewModelNotifier  taskController,  List<Task>? taskList, String projectTitle){
-    return  FloatingActionButton(
+  Widget add(BuildContext context, GlobalKey<FormState> formKey,
+      TaskViewModelNotifier taskController, List<Task>? taskList,
+      String projectTitle) {
+    return FloatingActionButton(
       backgroundColor: Colors.pinkAccent,
       shape: const CircleBorder(),
       onPressed: () {
@@ -96,9 +104,10 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
 
             return AlertDialog(
               title: const Text('Add ta new task'),
-              contentPadding: const EdgeInsets.all(24), // Adjust padding for bigger size
+              contentPadding: const EdgeInsets.all(24),
+              // Adjust padding for bigger size
               content: Form(
-                key:  formKey,
+                key: formKey,
                 // mainAxisSize: MainAxisSize.min,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -109,7 +118,6 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                         hintText: 'Enter Task',
                       ),
                       validator: (value) {
-
                         if (value!.isEmpty) {
                           return 'Please enter a task';
                         }
@@ -117,19 +125,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    // TextFormField(
-                    //   maxLength: 100,
-                    //   controller: descriptionController,
-                    //   decoration: const InputDecoration(
-                    //     hintText: 'Add Description',
-                    //   ),
-                    //   validator: (value) {
-                    //     if (value!.isEmpty) {
-                    //       return 'Please add a description';
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
+
                   ],
                 ),
               ),
@@ -140,19 +136,11 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                   },
                   child: const Text('Cancel'),
                 ),
-                // TextButton(
-                //   onPressed: () {
-                //     projectController.deleteFileFromSharedPreferences('project_file');
-                //     Navigator.of(context).pop();
-                //   },
-                //   child: const Text('Delete the file'),
-                // ),
 
                 TextButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       // Validation passed, proceed with saving
-
 
 
                       String title = titleController.text.trim();
@@ -164,7 +152,8 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                       };
 
 
-                      taskController.addTask(widget.taskList, newTask,widget.projectId.toString());
+                      taskController.addTask(widget.taskList, newTask,
+                          widget.projectId.toString());
 
                       Navigator.of(context).pop();
                     }
@@ -181,20 +170,25 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
   }
 
 
-  Widget tasks(List<Task> taskList){
+  Widget tasks(List<Task> taskList,TaskViewModelNotifier taskController ) {
     // print(taskList!.length);
-    return taskList.isNotEmpty? Expanded(
+    return taskList.isNotEmpty ? Expanded(
       child: ListView.builder(
         itemCount: taskList.length, // Number of items
         itemBuilder: (context, index) {
           return GestureDetector(
+            onTap:(){
+              showOptions(context,taskList[index].taskTitle,taskController,taskList,index,taskList[index].id);
+            } ,
             child: Container(
-              height: 50, // Adjust height as needed
+              height: 50,
+              // Adjust height as needed
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 color: Colors.blue,
               ),
-              margin: const EdgeInsets.all(5), // Add margin for spacing
+              margin: const EdgeInsets.all(5),
+              // Add margin for spacing
               alignment: Alignment.center,
               child: Text(
                 taskList[index].taskTitle,
@@ -205,10 +199,81 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
           );
         },
       ),
-    ):const Center(child: Text('Add a task'),);
+    ) : const Center(child: Text('Add a task'),);
   }
+
+  void showOptions(BuildContext context,String task, TaskViewModelNotifier taskController,
+      List<Task> listOfTasks,int index,  int taskID) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text('Delete'),
+              onTap: () {
+                // Handle delete logic
+                taskController.deleteTask(listOfTasks, index, taskID.toString());
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: const Text('Update'),
+              onTap: () {
+                Navigator.pop(context);
+                showUpdateDialog(context, task, taskController, listOfTasks, index,taskID);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showUpdateDialog(BuildContext context,String task,TaskViewModelNotifier taskController,
+      List<Task> listOfTasks,int index, int taskID) {
+    final TextEditingController controller = TextEditingController(
+        text: task);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Update Task'),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(hintText: "Task name"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Update'),
+              onPressed: () {
+
+                Map<String, dynamic> updatedTask =   {
+                  "task_name": controller.text.trim(),
+                  "completed": false
+                };
+
+
+
+                taskController.updateTask(listOfTasks, index, updatedTask, taskID.toString());
+
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 }
-
-
-
-

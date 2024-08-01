@@ -63,81 +63,49 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
 
   }
 
+  Future<void> updateTask(List<Task> listOfTasks,int index, Map<String,dynamic> data, String taskID)async{
+    state = const LoadingState();
+    final res = await restClient.updateTask(data,taskID);
 
-
-
-
-
-
-  Future<void> addTaskToProject(List<Task>? taskList,String projectTitle, Map<String, dynamic> taskmap) async {
-
-
-   try{
-     state  = const TaskLoadingState();
-
-
-   SharedPreferences prefs = await SharedPreferences.getInstance();
-   const String fileName = 'project_file';
-
-  // Retrieve the contents of the JSON file from SharedPreferences
-  // List<dynamic> fileContent = prefs.getStringList(fileName)?.map((e) => json.decode(e)).toList() ?? [];
-
-  // List<dynamic> fileContent = prefs.getStringList(fileName)?.map((e) => json.decode(e) as Map<String, dynamic>).toList() ?? [];
-  // print('The file content is ${fileContent}');
-
-
-  final String? jsonString = prefs.getString(fileName);
-      List<dynamic> fileContent = json.decode(jsonString!);
-
-      for(var projectMap in fileContent){
-        // // Find the project by its title
-        if(projectMap['Project title'] == projectTitle){
-          // // add the task to that project
-          projectMap['Tasks'].add(taskmap);
-           break;
-        }
+    res.fold((L) {
+      state = ErrorState(L);
+      Fluttertoast.showToast(msg: L);
+    }, (R) {
+      if(R.isNotEmpty){
+        // for (int i = 0; i < R.length; i++) {
+        listOfTasks[index] = Task.fromjson(R);
+        // listOfTasks.add(Task.fromjson(R));
+        // }
       }
-
-  // // Find the project by its title
-  // int index = fileContent.indexWhere((element) => element['Project title'] == projectTitle);
+      // listOfProjects.add(Project.fromjson(R[i]));
 
 
+      state = SuccessState(data: listOfTasks);
+      Fluttertoast.showToast(msg: 'Task modified');
+    });
+
+  }
+
+  Future<void> deleteTask(List<Task> listOfTasks,int index, String taskID)async{
+    state = const LoadingState();
+    final res = await restClient.deleteTask(taskID);
 
 
-  // if (index != -1) {
-  //   // Update the "Tasks" key by adding a new map of task
-  //   fileContent[index]['Tasks'].add(taskmap);
+    res.fold((L) {
+      state = ErrorState(L);
+      Fluttertoast.showToast(msg: L);
+    }, (R) {
+      if(R.isNotEmpty){
 
-    // Save the updated JSON content back to SharedPreferences
+       listOfTasks.removeAt(index);
 
-    // List<String> updatedContent = fileContent.map((e) => json.encode(e)).toList();
-    // await prefs.setStringList(fileName, updatedContent);
+      }
+      state = SuccessState(data: listOfTasks);
+      Fluttertoast.showToast(msg: R);
+    });
 
+  }
 
-    // Serialize the updated content back to JSON
-String updatedJsonString = json.encode(fileContent);
-
-// Save the updated JSON string back to shared preferences
-await prefs.setString(fileName, updatedJsonString);
-
-
-
-
-  taskList?.add(Task.fromjson(taskmap));
-
-
-  state = TaskSuccessState(data: taskList, nameOfProject: projectTitle);
-
-   }catch(e){
-    state = const  ErrorState('An error occured while saving the task');
-    rethrow;
-   }
-
-
-
-
-  
-}
 
 
 

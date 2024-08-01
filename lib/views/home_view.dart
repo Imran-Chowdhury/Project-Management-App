@@ -105,7 +105,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 
 
-           (projectState is SuccessState)?horizontalSlider(projectState.data): horizontalSlider(projectList ),
+           (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
+           horizontalSlider(projectList,projectController ),
 
 
 
@@ -291,7 +292,7 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNo
 }
 
 
-Widget horizontalSlider( List<Project> projectsList){
+Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier projectController){
 //   Widget horizontalSlider(final projectState){
   // final projectState = ref.watch(projectViewModelProvider);
   List<Project> listOfProjects = projectsList;
@@ -303,6 +304,10 @@ Widget horizontalSlider( List<Project> projectsList){
         itemCount: listOfProjects.length,
         itemBuilder: (BuildContext context, int index, int realIndex) {
           return GestureDetector(
+            onLongPress: (){
+              showOptions(context, listOfProjects[index].name, listOfProjects[index].description,
+                  projectController, listOfProjects, index, listOfProjects[index].id);
+            },
             onTap: (){
 
               List<Task>? taskList = [];
@@ -376,6 +381,89 @@ Widget todayTaskList(){
                ),
        );
 }
+
+
+   void showOptions(BuildContext context,String project,String description, ProjectViewModelNotifier projectController,
+       List<Project> listOfProjects,int index,  int projectID) {
+     showModalBottomSheet(
+       context: context,
+       builder: (BuildContext context) {
+         return Wrap(
+           children: <Widget>[
+             ListTile(
+               leading: const Icon(Icons.delete),
+               title: const Text('Delete'),
+               onTap: () {
+                 // Handle delete logic
+                 projectController.deleteProject(listOfProjects, index, projectID.toString());
+                 Navigator.pop(context);
+               },
+             ),
+             ListTile(
+               leading: const Icon(Icons.edit),
+               title: const Text('Update'),
+               onTap: () {
+                 Navigator.pop(context);
+                 showUpdateDialog(context, project, description, projectController, listOfProjects, index,projectID);
+               },
+             ),
+           ],
+         );
+       },
+     );
+   }
+
+   void showUpdateDialog(BuildContext context,String project,String description, ProjectViewModelNotifier projectController,
+       List<Project> listOfProjects,int index, int taskID) {
+     final TextEditingController nameController = TextEditingController(
+         text: project);
+     final TextEditingController descriptionController = TextEditingController(
+         text: description);
+     showDialog(
+       context: context,
+       builder: (BuildContext context) {
+         return AlertDialog(
+           title: const Text('Update Project'),
+           content: Column(
+             children: [
+               TextField(
+                 controller: nameController,
+                 decoration: const InputDecoration(hintText: "Project name"),
+               ),
+               TextField(
+                 controller: descriptionController,
+                 decoration: const InputDecoration(hintText: 'Description'),
+               ),
+             ],
+           ),
+           actions: <Widget>[
+             TextButton(
+               child: const Text('Cancel'),
+               onPressed: () {
+                 Navigator.of(context).pop();
+               },
+             ),
+             TextButton(
+               child: const Text('Update'),
+               onPressed: () {
+
+                 Map<String, dynamic> updatedTask =   {
+                   "project_name" : nameController.text.trim(),
+                   "description": descriptionController.text.trim(),
+                 };
+
+
+
+                 projectController.updateProject(listOfProjects, index, updatedTask, taskID.toString());
+
+                 Navigator.of(context).pop();
+               },
+             ),
+           ],
+         );
+       },
+     );
+   }
 
 
 
