@@ -10,6 +10,23 @@ class Task {
 
   Task({required this.id, required this.taskTitle, required this.date, required this.completed, required this.projectId});
 
+  Task copyWith({
+    int? id,
+    String? nameOfTask,
+    String? createdOn,
+    bool? completed,
+    final projectId,
+  }) {
+    return Task(
+      id: id ?? this.id,
+      taskTitle: nameOfTask ?? taskTitle,
+      date: createdOn ?? date,
+      completed: completed ?? this.completed,
+      projectId: projectId ?? this.projectId
+    );
+  }
+
+
 factory Task.fromjson(Map<String, dynamic> taskJson ){
   return Task(
       id: taskJson['id'],
@@ -19,11 +36,6 @@ factory Task.fromjson(Map<String, dynamic> taskJson ){
       projectId: taskJson['project_id']
   );
 }
-// Map<String, dynamic> toJson(){
-//   return{};
-// }
-
-
 
 
 }

@@ -170,16 +170,48 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
   }
 
 
-  Widget tasks(List<Task> taskList,TaskViewModelNotifier taskController ) {
-    // print(taskList!.length);
-    return taskList.isNotEmpty ? Expanded(
+  // Widget tasks(List<Task> taskList,TaskViewModelNotifier taskController ) {
+  //   // print(taskList!.length);
+  //   return taskList.isNotEmpty ? Expanded(
+  //     child: ListView.builder(
+  //       itemCount: taskList.length, // Number of items
+  //       itemBuilder: (context, index) {
+  //         return GestureDetector(
+  //           onTap:(){
+  //             showOptions(context,taskList[index].taskTitle,taskController,taskList,index,taskList[index].id);
+  //           } ,
+  //           child: Container(
+  //             height: 50,
+  //             // Adjust height as needed
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(10.0),
+  //               color: Colors.blue,
+  //             ),
+  //             margin: const EdgeInsets.all(5),
+  //             // Add margin for spacing
+  //             alignment: Alignment.center,
+  //             child: Text(
+  //               taskList[index].taskTitle,
+  //               // 'Item ${index + 1}',
+  //               style: const TextStyle(color: Colors.white, fontSize: 18),
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   ) : const Center(child: Text('Add a task'),);
+  // }
+
+  Widget tasks(List<Task> taskList, TaskViewModelNotifier taskController) {
+    return taskList.isNotEmpty
+        ? Expanded(
       child: ListView.builder(
         itemCount: taskList.length, // Number of items
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap:(){
-              showOptions(context,taskList[index].taskTitle,taskController,taskList,index,taskList[index].id);
-            } ,
+            onTap: () {
+              showOptions(context, taskList[index].taskTitle, taskController, taskList, index, taskList[index].id);
+            },
             child: Container(
               height: 50,
               // Adjust height as needed
@@ -189,18 +221,36 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
               ),
               margin: const EdgeInsets.all(5),
               // Add margin for spacing
-              alignment: Alignment.center,
-              child: Text(
-                taskList[index].taskTitle,
-                // 'Item ${index + 1}',
-                style: const TextStyle(color: Colors.white, fontSize: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        taskList[index].taskTitle,
+                        style: const TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  Checkbox(
+                    value: taskList[index].completed,
+                    onChanged: (bool? value) {
+                      taskController.toggleTaskCompletion(taskList,index,taskList[index]);
+                    },
+                    checkColor: Colors.white,
+                    activeColor: Colors.green,
+                  ),
+                ],
               ),
             ),
           );
         },
       ),
-    ) : const Center(child: Text('Add a task'),);
+    )
+        : const Center(child: Text('Add a task'));
   }
+
 
   void showOptions(BuildContext context,String task, TaskViewModelNotifier taskController,
       List<Task> listOfTasks,int index,  int taskID) {

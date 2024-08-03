@@ -63,6 +63,7 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
 
   }
 
+
   Future<void> updateTask(List<Task> listOfTasks,int index, Map<String,dynamic> data, String taskID)async{
     state = const LoadingState();
     final res = await restClient.updateTask(data,taskID);
@@ -81,7 +82,7 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
 
 
       state = SuccessState(data: listOfTasks);
-      Fluttertoast.showToast(msg: 'Task modified');
+      // Fluttertoast.showToast(msg: 'Task modified');
     });
 
   }
@@ -106,13 +107,30 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
 
   }
 
+  Future<void> toggleTaskCompletion(List<Task>listOfTask, int index, Task task) async {
+    final updatedTask = task.copyWith(completed: !task.completed);
+    // listOfTask[index] = updatedTask;
+    // state = SuccessState(data: listOfTask);
 
+    Map<String,dynamic> data =  {
+      "task_name": updatedTask.taskTitle,
+      "completed": updatedTask.completed,
+    };
+    String taskID = updatedTask.id.toString();
 
-
+    await updateTask(listOfTask , index,  data, taskID);
+  }
 
 
 
 
 }
+
+
+
+
+
+
+
 
 
