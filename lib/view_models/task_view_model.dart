@@ -50,11 +50,11 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
       Fluttertoast.showToast(msg: L);
     }, (R) {
       if(R.isNotEmpty){
-        // for (int i = 0; i < R.length; i++) {
+
         listOfTasks.add(Task.fromjson(R));
-        // }
+
       }
-      // listOfProjects.add(Project.fromjson(R[i]));
+
 
 
       state = SuccessState(data: listOfTasks);
@@ -73,12 +73,12 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
       Fluttertoast.showToast(msg: L);
     }, (R) {
       if(R.isNotEmpty){
-        // for (int i = 0; i < R.length; i++) {
+
         listOfTasks[index] = Task.fromjson(R);
-        // listOfTasks.add(Task.fromjson(R));
-        // }
+
+
       }
-      // listOfProjects.add(Project.fromjson(R[i]));
+
 
 
       state = SuccessState(data: listOfTasks);

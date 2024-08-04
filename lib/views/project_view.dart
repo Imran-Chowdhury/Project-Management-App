@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:project_management_app/base_state/base_state.dart';
 import 'package:project_management_app/models/task_model/task_model.dart';
+import 'package:project_management_app/utils/background_widget.dart';
 import 'package:project_management_app/view_models/task_view_model.dart';
 
 
@@ -51,8 +52,11 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
     // final helloWorld = ref.watch(helloWorldProvider);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Stack( // Wrap the Column with a Stack
           children: [
+            // BackgroudContainer(image: "assets/images/tasks.jpg",),
+            // BackgroudContainer(),
             Column(
               children: [
                 Align(
@@ -61,7 +65,9 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                     child: Text(
                       widget.projectName,
                       style: const TextStyle(
+                        color: Colors.black45,
                         fontSize: 30.0,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
                   ),
@@ -169,87 +175,83 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
     );
   }
 
-
-  // Widget tasks(List<Task> taskList,TaskViewModelNotifier taskController ) {
-  //   // print(taskList!.length);
-  //   return taskList.isNotEmpty ? Expanded(
-  //     child: ListView.builder(
-  //       itemCount: taskList.length, // Number of items
-  //       itemBuilder: (context, index) {
-  //         return GestureDetector(
-  //           onTap:(){
-  //             showOptions(context,taskList[index].taskTitle,taskController,taskList,index,taskList[index].id);
-  //           } ,
-  //           child: Container(
-  //             height: 50,
-  //             // Adjust height as needed
-  //             decoration: BoxDecoration(
-  //               borderRadius: BorderRadius.circular(10.0),
-  //               color: Colors.blue,
-  //             ),
-  //             margin: const EdgeInsets.all(5),
-  //             // Add margin for spacing
-  //             alignment: Alignment.center,
-  //             child: Text(
-  //               taskList[index].taskTitle,
-  //               // 'Item ${index + 1}',
-  //               style: const TextStyle(color: Colors.white, fontSize: 18),
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   ) : const Center(child: Text('Add a task'),);
-  // }
-
   Widget tasks(List<Task> taskList, TaskViewModelNotifier taskController) {
     return taskList.isNotEmpty
         ? Expanded(
       child: ListView.builder(
         itemCount: taskList.length, // Number of items
         itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              showOptions(context, taskList[index].taskTitle, taskController, taskList, index, taskList[index].id);
-            },
-            child: Container(
-              height: 50,
-              // Adjust height as needed
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.blue,
+          return Row(
+            children: [
+              Checkbox(
+                value: taskList[index].completed,
+                onChanged: (bool? value) {
+                  taskController.toggleTaskCompletion(taskList,index,taskList[index]);
+                },
+                checkColor: Colors.white,
+                activeColor: Colors.green,
               ),
-              margin: const EdgeInsets.all(5),
-              // Add margin for spacing
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        taskList[index].taskTitle,
-                        style: const TextStyle(color: Colors.white, fontSize: 18),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onLongPress: () {
+                    showOptions(context, taskList[index].taskTitle, taskController, taskList, index, taskList[index].id);
+                  },
+                  child: Material(
+                    elevation: 8.0, // Set the elevation
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0XFFAEBE25),
+                        // color:  Colors.blue,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      height: 120,
+                      width: 320,
+
+
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+
+                        title: Text(
+                          taskList[index].taskTitle,
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: const Column(
+                          children: [
+                            Row(
+                              children: <Widget>[
+                                Icon( Icons.priority_high, color: Colors.yellow),
+                                Text(" Priority: High", style: TextStyle(color: Colors.white)),
+
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Icon(Icons.calendar_today, color: Colors.yellow, size: 20,),
+
+                                Text(" Put deadline here", style: TextStyle(color: Colors.white)),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Checkbox(
-                    value: taskList[index].completed,
-                    onChanged: (bool? value) {
-                      taskController.toggleTaskCompletion(taskList,index,taskList[index]);
-                    },
-                    checkColor: Colors.white,
-                    activeColor: Colors.green,
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           );
         },
       ),
     )
         : const Center(child: Text('Add a task'));
   }
+
+
 
 
   void showOptions(BuildContext context,String task, TaskViewModelNotifier taskController,

@@ -20,6 +20,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../utils/background_widget.dart';
+
 
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -68,87 +70,142 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 
    return  Scaffold(
+     backgroundColor: Colors.white,
 
-     body: Padding(
-       padding: const EdgeInsets.all(20.0),
-       child: (projectState is LoadingState) ? 
-       const Center(
-                child: CircularProgressIndicator(),
-              )  :    Stack(
+     body:
+    //  Padding(
+    //    padding: const EdgeInsets.all(20.0),
+    //    child: (projectState is LoadingState) ?
+    //    const Center(
+    //             child: CircularProgressIndicator(),
+    //           )  :    Stack(
+    //      children: [
+    //       Column(
+    //      children: [
+    //        Row(
+    //          children: [
+    //            Container(
+    //              height: 70.0,
+    //              width: 70.0,
+    //              color: Colors.blueAccent,
+    //              ),
+    //             const SizedBox(width: 10.0,),
+    //              Column(
+    //                children: [
+    //                const Text('Hi, Imran',
+    //                  style: TextStyle(
+    //                  fontWeight: FontWeight.bold, fontSize: 20.0),
+    //                ),
+    //                     Text(formattedDate),
+    //                ],
+    //              ),
+    //          ],
+    //        ),
+    //
+    //        const SizedBox(height: 20.0,),
+    //
+    //        headings('Projects'),
+    //
+    //
+    //
+    //
+    //        (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
+    //        horizontalSlider(projectList,projectController ),
+    //
+    //
+    //
+    //
+    //        const SizedBox(height: 20.0,),
+    //
+    //        headings("Today's Tasks"),
+    //
+    //        todayTaskList(),
+    //
+    //         ],
+    //       ),
+    //
+    //
+    //        if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
+    //           const Center(
+    //             child: CircularProgressIndicator(),
+    //           ),
+    //
+    //
+    //
+    //     ],
+    //    ),
+    //
+    // ),
+       Stack(
          children: [
-          Column(
-         children: [
-           Row(
+
+
+          // BackgroudContainer( image: "assets/images/home.jpg",),
+          //  BackgroudContainer(),
+           Padding(
+           padding: const EdgeInsets.all(20.0),
+           child: (projectState is LoadingState) ?
+           const Center(
+             child: CircularProgressIndicator(),
+           )  :    Stack(
              children: [
-               Container(
-                 height: 70.0,
-                 width: 70.0,
-                 color: Colors.blueAccent,
-                 ),
-                const SizedBox(width: 10.0,),
-                 Column(
-                   children: [
-                   const Text('Hi, Imran',
-                     style: TextStyle(
-                     fontWeight: FontWeight.bold, fontSize: 20.0),
+               Column(
+                 children: [
+                   Row(
+                     children: [
+                       Container(
+                         height: 70.0,
+                         width: 70.0,
+                         color: Colors.blueAccent,
+                       ),
+                       const SizedBox(width: 10.0,),
+                       Column(
+                         children: [
+                           const Text('Hi, Imran',
+                             style: TextStyle(
+                                 fontWeight: FontWeight.bold, fontSize: 20.0),
+                           ),
+                           Text(formattedDate),
+                         ],
+                       ),
+                     ],
                    ),
-                        Text(formattedDate),
-                   ],
+
+                   const SizedBox(height: 20.0,),
+
+                   headings('Projects'),
+
+
+
+
+                   (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
+                   horizontalSlider(projectList,projectController ),
+
+
+
+
+                   const SizedBox(height: 20.0,),
+
+                   headings("Announcements"),
+
+                   todayTaskList(),
+
+                 ],
+               ),
+
+
+               if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
+                 const Center(
+                   child: CircularProgressIndicator(),
                  ),
+
+
+
              ],
            ),
-             
-           const SizedBox(height: 20.0,),
-         
-           headings('Projects'),
 
-
-
-
-           (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
-           horizontalSlider(projectList,projectController ),
-
-
-
-         
-
-
-
-
-
-
-
-         
-         
-           
-          
-          
-         
-         
-         
-         
-           const SizedBox(height: 20.0,),
-         
-           headings("Today's Tasks"),
-         
-           todayTaskList(),
-         
-            ],
-          ),
-
-
-           if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
-              const Center(
-                child: CircularProgressIndicator(),
-              ),
-
-
-
-        ],
-       ),
-       
-    ),
-
+         ),
+       ],),
 
       bottomNavigationBar: BottomAppBar(
         child: Row(
@@ -185,18 +242,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       floatingActionButton: add(context,_formKey, projectController, projectState,projectList ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
-   
-    
-   
-    
-    
   }
 
 
 Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNotifier projectController, final projectState,List<Project> list){
   // List<Project> list = [];
     return  FloatingActionButton(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.pink,
       shape: const CircleBorder(),
       onPressed: () {
         showDialog(
@@ -325,20 +377,44 @@ Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier pr
 
 
 
-            child: Container(
-              margin: const EdgeInsets.all(5.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.red,
-              ),
-              child:  Center(
-                child: Text(
-                 // projectsList[index].name,
-                  listOfProjects[index].name,
-                  style: const  TextStyle(color: Colors.white, fontSize: 20.0),
+            child: Material(
+              elevation: 8.0, // Set the elevation
+              borderRadius: BorderRadius.circular(20.0), // Optional: Add rounded corners
+              // shadowColor: Colors.black.withOpacity(0.5), // Optional: Customize the shadow color
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFbe2525), // Container color
+                  borderRadius: BorderRadius.circular(20.0), // Same as Material's borderRadius
                 ),
+                 child:  Center(
+                   child: Text(
+
+                    listOfProjects[index].name,
+                    style: const  TextStyle(color: Colors.white, fontSize: 20.0),
+                   ),
+                 ),
               ),
             ),
+
+
+            // Container(
+            //   margin: const EdgeInsets.all(5.0),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(10.0),
+            //     color: const Color(0xFF007BFF),
+            //   ),
+            //   child:  Center(
+            //     child: Text(
+            //      // projectsList[index].name,
+            //       listOfProjects[index].name,
+            //       style: const  TextStyle(color: Colors.white, fontSize: 20.0),
+            //     ),
+            //   ),
+            // ),
+
+
+
           );
         },
         options: CarouselOptions(
@@ -364,18 +440,32 @@ Widget todayTaskList(){
          child: ListView.builder(
           itemCount: 15, // Number of items
           itemBuilder: (context, index) {
-            return Container(
-              height: 50, // Adjust height as needed
-              decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: Colors.blue,
-            ),
-              margin: const EdgeInsets.all(5), // Add margin for spacing
-              alignment: Alignment.center,
-              child: Text(
-                'Item ${index + 1}',
-                style: const TextStyle(color: Colors.white, fontSize: 18),
-              ),
+            return Row(
+              children: [
+                const Icon(Icons.arrow_forward_ios),
+              Column(children: [
+                Material(
+                  color: Colors.blueGrey,
+                  elevation: 8.0, // Set the elevation
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Container(
+                    height: 100,
+                    width: 330,// Adjust height as needed
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Colors.blueGrey,
+                    ),
+                    margin: const EdgeInsets.all(5), // Add margin for spacing
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'To be implemented',
+                      style: const TextStyle(color: Colors.black, fontSize: 18),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10,),
+              ],),
+              ],
             );
           },
                ),
@@ -465,34 +555,6 @@ Widget todayTaskList(){
      );
    }
 
-
-
-// Widget headings(String projectOrTask) {
-//   return Row(
-//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//     children: [
-//       Padding(
-//         padding: const EdgeInsets.only(left: 5.0),
-//         child: Text(
-//          projectOrTask,
-//           style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-//         ),
-//       ),
-//       Padding(
-//         padding: const EdgeInsets.only(right: 10.0),
-//         child: GestureDetector(
-//           onTap: () {
-//             // Navigate to see all page or perform desired action
-//           },
-//           child: const Text(
-//             'See all',
-//             style: TextStyle(color: Colors.blue, fontSize: 16.0),
-//           ),
-//         ),
-//       ),
-//     ],
-//   );
-// }
 }
 
 
