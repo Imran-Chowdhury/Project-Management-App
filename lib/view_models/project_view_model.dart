@@ -108,6 +108,11 @@ class ProjectViewModelNotifier extends StateNotifier<BaseState> {
       state = SuccessState(data: listOfProjects);
       Fluttertoast.showToast(msg: R);
     });
+  }
+
+
+  void searchProjects(){
+
 
   }
 

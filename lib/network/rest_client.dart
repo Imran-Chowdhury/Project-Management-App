@@ -148,7 +148,7 @@ class RestClient {
   }
 
   Future<Either<String,String>> deleteTask(String taskId) async {
-    final String apiUrl = 'http://192.168.0.106:8000/delete_tasks/$taskId';
+    final String apiUrl = 'http://192.168.0.106:8000/delete_task/$taskId';
 
     final response = await http.delete(
       Uri.parse(apiUrl),

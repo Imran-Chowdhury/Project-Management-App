@@ -8,8 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:project_management_app/base_state/base_state.dart';
 import 'package:project_management_app/models/task_model/task_model.dart';
-import 'package:project_management_app/utils/background_widget.dart';
+
 import 'package:project_management_app/view_models/task_view_model.dart';
+import 'package:project_management_app/views/pie_chart.dart';
 
 
 class ProjectScreen extends ConsumerStatefulWidget {
@@ -48,48 +49,99 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
         taskViewModelProvider(widget.projectId).notifier);
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+    String priority = 'High';
+    DateTime? selectedDate;
+
     // 4. use ref.watch() to get the value of the provider
     // final helloWorld = ref.watch(helloWorldProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Stack( // Wrap the Column with a Stack
+        body: PageView(
           children: [
-            // BackgroudContainer(image: "assets/images/tasks.jpg",),
-            // BackgroudContainer(),
-            Column(
+            Stack( // Wrap the Column with a Stack
               children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Center(
-                    child: Text(
-                      widget.projectName,
-                      style: const TextStyle(
-                        color: Colors.black45,
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold
+                // BackgroudContainer(image: "assets/images/tasks.jpg",),
+                // BackgroudContainer(),
+                Column(
+                  children: [
+                    const SizedBox(height: 20,),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Center(
+                        child: Text(
+                          widget.projectName,
+                          style: const TextStyle(
+                              color: Colors.black45,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
                       ),
                     ),
+                    // (taskState is TaskSuccessState&&taskState.nameOfProject == projectName)?tasks(taskState.data): tasks(taskList),
+                    (taskState is TaskSuccessState) ? tasks(taskState.data,taskController) : tasks(
+                        widget.taskList,taskController),
+                    //  tasks(taskList),
+
+                  ],
+                ),
+                Positioned(
+                  bottom: 16.0,
+                  right: 20.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: add(context, formKey, taskController, widget.taskList,
+                        widget.projectName, ),
                   ),
                 ),
-                // (taskState is TaskSuccessState&&taskState.nameOfProject == projectName)?tasks(taskState.data): tasks(taskList),
-                (taskState is TaskSuccessState) ? tasks(taskState.data,taskController) : tasks(
-                    widget.taskList,taskController),
-                //  tasks(taskList),
-
               ],
             ),
-            Positioned(
-              bottom: 16.0,
-              right: 20.0,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: add(context, formKey, taskController, widget.taskList,
-                    widget.projectName),
-              ),
-            ),
+
+            (taskState is TaskSuccessState) ? PieChartScreen(projectName: widget.projectName,listOfTasks: taskState.data,):
+            PieChartScreen(projectName: widget.projectName,listOfTasks: widget.taskList,),
           ],
         ),
+
+
+        // Stack( // Wrap the Column with a Stack
+        //   children: [
+        //     // BackgroudContainer(image: "assets/images/tasks.jpg",),
+        //     // BackgroudContainer(),
+        //     Column(
+        //       children: [
+        //        const SizedBox(height: 20,),
+        //         Align(
+        //           alignment: Alignment.topCenter,
+        //           child: Center(
+        //             child: Text(
+        //               widget.projectName,
+        //               style: const TextStyle(
+        //                 color: Colors.black45,
+        //                 fontSize: 30.0,
+        //                 fontWeight: FontWeight.bold
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //         // (taskState is TaskSuccessState&&taskState.nameOfProject == projectName)?tasks(taskState.data): tasks(taskList),
+        //         (taskState is TaskSuccessState) ? tasks(taskState.data,taskController) : tasks(
+        //             widget.taskList,taskController),
+        //         //  tasks(taskList),
+        //
+        //       ],
+        //     ),
+        //     Positioned(
+        //       bottom: 16.0,
+        //       right: 20.0,
+        //       child: Padding(
+        //         padding: const EdgeInsets.all(16.0),
+        //         child: add(context, formKey, taskController, widget.taskList,
+        //             widget.projectName, selectedDate!),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ),
     );
   }
@@ -97,7 +149,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
 
   Widget add(BuildContext context, GlobalKey<FormState> formKey,
       TaskViewModelNotifier taskController, List<Task>? taskList,
-      String projectTitle) {
+      String projectTitle, ) {
     return FloatingActionButton(
       backgroundColor: Colors.pinkAccent,
       shape: const CircleBorder(),
@@ -108,7 +160,102 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
             TextEditingController titleController = TextEditingController();
             // TextEditingController descriptionController = TextEditingController();
 
-            return AlertDialog(
+            return
+              // AlertDialog(
+              //   title: const Text('Add a new task'),
+              //   contentPadding: const EdgeInsets.all(24),
+              //   content: Form(
+              //     key: formKey,
+              //     child: Column(
+              //       mainAxisSize: MainAxisSize.min,
+              //       children: [
+              //         TextFormField(
+              //           controller: titleController,
+              //           decoration: const InputDecoration(
+              //             hintText: 'Enter Task',
+              //           ),
+              //           validator: (value) {
+              //             if (value!.isEmpty) {
+              //               return 'Please enter a task';
+              //             }
+              //             return null;
+              //           },
+              //         ),
+              //         const SizedBox(height: 16),
+              //         Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             const Text("Priority"),
+              //             RadioListTile<String>(
+              //               title: const Text('High'),
+              //               value: 'High',
+              //               groupValue: 'High',
+              //               onChanged: (value) {
+              //               //   setState(() {
+              //               //     priority = value!;
+              //               //   });
+              //               },
+              //             ),
+              //             RadioListTile<String>(
+              //               title: const Text('Medium'),
+              //               value: 'Medium',
+              //               groupValue: 'Medium',
+              //               onChanged: (value) {
+              //                 // setState(() {
+              //                 //   _priority = value!;
+              //                 // });
+              //               },
+              //             ),
+              //             RadioListTile<String>(
+              //               title: const Text('Low'),
+              //               value: 'Low',
+              //               groupValue: 'Low',
+              //               onChanged: (value) {
+              //                 // setState(() {
+              //                 //   _priority = value!;
+              //                 // });
+              //               },
+              //             ),
+              //           ],
+              //         ),
+              //         const SizedBox(height: 16),
+              //         Row(
+              //           children: [
+              //             Expanded(
+              //               child: Text(
+              //                 selectedDate == null
+              //                     ? 'No deadline selected'
+              //                     : 'Deadline: ${DateFormat.yMd().format(selectedDate!)}',
+              //               ),
+              //             ),
+              //             TextButton(
+              //               onPressed: () async {
+              //                 DateTime? pickedDate = await showDatePicker(
+              //                   context: context,
+              //                   initialDate: DateTime.now(),
+              //                   firstDate: DateTime.now(),
+              //                   lastDate: DateTime(2101),
+              //                 );
+              //                 if (pickedDate != null) {
+              //                   setState(() {
+              //                     selectedDate = pickedDate;
+              //                   });
+              //                 }
+              //               },
+              //               child: const Text('Select deadline'),
+              //             ),
+              //           ],
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+
+
+
+
+
+
+              AlertDialog(
               title: const Text('Add ta new task'),
               contentPadding: const EdgeInsets.all(24),
               // Adjust padding for bigger size
@@ -189,7 +336,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                   taskController.toggleTaskCompletion(taskList,index,taskList[index]);
                 },
                 checkColor: Colors.white,
-                activeColor: Colors.green,
+                activeColor: Colors.pink,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

@@ -398,20 +398,7 @@ Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier pr
             ),
 
 
-            // Container(
-            //   margin: const EdgeInsets.all(5.0),
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(10.0),
-            //     color: const Color(0xFF007BFF),
-            //   ),
-            //   child:  Center(
-            //     child: Text(
-            //      // projectsList[index].name,
-            //       listOfProjects[index].name,
-            //       style: const  TextStyle(color: Colors.white, fontSize: 20.0),
-            //     ),
-            //   ),
-            // ),
+
 
 
 
@@ -445,7 +432,7 @@ Widget todayTaskList(){
                 const Icon(Icons.arrow_forward_ios),
               Column(children: [
                 Material(
-                  color: Colors.blueGrey,
+                  color: Color(0xFFD1BABA),
                   elevation: 8.0, // Set the elevation
                   borderRadius: BorderRadius.circular(20.0),
                   child: Container(
@@ -453,7 +440,7 @@ Widget todayTaskList(){
                     width: 330,// Adjust height as needed
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
-                      color: Colors.blueGrey,
+                      color: Color(0xFFD1BABA),
                     ),
                     margin: const EdgeInsets.all(5), // Add margin for spacing
                     alignment: Alignment.center,
@@ -491,7 +478,7 @@ Widget todayTaskList(){
              ),
              ListTile(
                leading: const Icon(Icons.edit),
-               title: const Text('Update'),
+               title: const Text('Edit'),
                onTap: () {
                  Navigator.pop(context);
                  showUpdateDialog(context, project, description, projectController, listOfProjects, index,projectID);
