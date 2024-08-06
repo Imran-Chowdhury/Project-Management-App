@@ -2,6 +2,7 @@
 
 
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +13,12 @@ import 'package:intl/intl.dart';
 import 'package:project_management_app/base_state/base_state.dart';
 import 'package:project_management_app/models/project_model/project_model.dart';
 import 'package:project_management_app/models/task_model/task_model.dart';
+import 'package:project_management_app/utils/announcement_widget.dart';
 
 import 'package:project_management_app/view_models/project_view_model.dart';
+import 'package:project_management_app/views/announcement_view.dart';
 import 'package:project_management_app/views/project_view.dart';
+import 'package:project_management_app/views/search_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -188,8 +192,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                    headings("Announcements"),
 
-                   todayTaskList(),
+                   // announcements(),
 
+                   AnnouncementWidget(),
                  ],
                ),
 
@@ -221,6 +226,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               icon: const Icon(Icons.search),
               onPressed: () {
                 // Handle press
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  SearchScreen(allProjects: projectList,)),
+                );
               },
             ),
             const SizedBox(width: 40), // This creates space for the round button
@@ -228,12 +237,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               icon: const Icon(Icons.notifications),
               onPressed: () {
                 // Handle press
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  NotificationScreen()),
+                );
+
               },
             ),
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
                 // Handle press
+
               },
             ),
           ],
@@ -303,13 +318,7 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNo
                   },
                   child: const Text('Cancel'),
                 ),
-                // TextButton(
-                //   onPressed: () {
-                //     projectController.deleteFileFromSharedPreferences('project_file');
-                //     Navigator.of(context).pop();
-                //   },
-                //   child: const Text('Delete the file'),
-                // ),
+
                 
                 TextButton(
                   onPressed: () {
@@ -384,14 +393,23 @@ Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier pr
               child: Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFbe2525), // Container color
+                  gradient: const LinearGradient(colors: [
+                    // Color(0xFF88a03d),
+                    // Color(0xFFC5C547)
+                    Color(0xFF912209),Color(0xFFC74426)
+                    ]),
+                    //
+                  // color: const Color(0xFF88a03d), // Container color
+                  // color: const Color(0xFFC5C547), // Container color
+
+
                   borderRadius: BorderRadius.circular(20.0), // Same as Material's borderRadius
                 ),
                  child:  Center(
                    child: Text(
 
                     listOfProjects[index].name,
-                    style: const  TextStyle(color: Colors.white, fontSize: 20.0),
+                    style: const  TextStyle(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 25.0),
                    ),
                  ),
               ),
@@ -422,7 +440,7 @@ Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier pr
       ): const Center(child: Text('Start by adding a project'),);
 }
 
-Widget todayTaskList(){
+Widget announcements(){
   return  Expanded(
          child: ListView.builder(
           itemCount: 15, // Number of items
@@ -458,6 +476,34 @@ Widget todayTaskList(){
                ),
        );
 }
+
+Widget headings(String projectOrTask) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 5.0),
+        child: Text(
+         projectOrTask,
+          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(right: 10.0),
+        child: GestureDetector(
+          onTap: () {
+            // Navigate to see all page or perform desired action
+          },
+          child: const Text(
+            'See all',
+            style: TextStyle(color: Colors.blue, fontSize: 16.0),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
 
 
    void showOptions(BuildContext context,String project,String description, ProjectViewModelNotifier projectController,
@@ -543,36 +589,6 @@ Widget todayTaskList(){
    }
 
 }
-
-
-
-Widget headings(String projectOrTask) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 5.0),
-        child: Text(
-         projectOrTask,
-          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(right: 10.0),
-        child: GestureDetector(
-          onTap: () {
-            // Navigate to see all page or perform desired action
-          },
-          child: const Text(
-            'See all',
-            style: TextStyle(color: Colors.blue, fontSize: 16.0),
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
 
 
 

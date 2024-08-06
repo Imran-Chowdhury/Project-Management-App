@@ -136,41 +136,6 @@ class _PieChartScreenState extends ConsumerState<PieChartScreen> {
   }
 
 
-    //   Scaffold(
-    //   backgroundColor: Colors.white10,
-    //   body: Column(
-    //     children: [
-    //       const SizedBox(height: 20,),
-    //       Align(
-    //         alignment: Alignment.topCenter,
-    //         child: Center(
-    //           child: Text(
-    //             widget.projectName,
-    //
-    //             style: const TextStyle(
-    //                 color: Colors.black45,
-    //                 fontSize: 30.0,
-    //                 fontWeight: FontWeight.bold
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //
-    //       Expanded(
-    //         child: PieChart(
-    //           swapAnimationCurve: Curves.easeInOut,
-    //           swapAnimationDuration: const Duration(milliseconds: 700),
-    //           PieChartData(
-    //             sectionsSpace: 4,
-    //             centerSpaceRadius: 90,
-    //             sections: showingSections(completedTasks, inCompletedTasks),
-    //           ),
-    //         ),
-    //       )
-    //
-    //     ],
-    //   )
-    // );
   }
 
   List<PieChartSectionData> showingSections(double completedTasks, double inCompletedTasks) {

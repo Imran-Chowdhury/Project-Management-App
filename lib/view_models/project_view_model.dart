@@ -111,12 +111,5 @@ class ProjectViewModelNotifier extends StateNotifier<BaseState> {
   }
 
 
-  void searchProjects(){
-
-
-  }
-
-
-
-
 }
+
