@@ -35,13 +35,5 @@ class Project {
       );
   }
 
-
 }
 
-    //  {
-    //       'Project title': title,
-    //       'Description': description,
-    //       'Date of Creation': date,
-    //       'Tasks': [],
-    //       'id':id,
-    //     }

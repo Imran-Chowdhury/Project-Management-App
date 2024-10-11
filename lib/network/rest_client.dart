@@ -10,17 +10,66 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
+import 'api.dart';
+
 final restClientProvider = Provider((ref) => RestClient());
 
 
 
 class RestClient {
+/////////////////////////////////////User///////////////////////////////
+  Future<Either<Map<String,dynamic>, Map<String,dynamic>>> signIn(Map<String,dynamic> data) async {
 
+    String getSignInUrl = '${API.baseUrl}login/';
+    Response response = await http.post(
+        Uri.parse(getSignInUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+     Map<String,dynamic> successBody = json.decode(response.body);
+
+      return Right(successBody);
+    } else {
+      Map<String,dynamic> errorBody = json.decode(response.body);
+      return  Left(errorBody);
+
+    }
+
+  }
+
+  Future<Either<Map<String,dynamic>,String>> signOut(Map<String,dynamic> data) async {
+
+    String signOutUrl = '${API.baseUrl}logout/';
+    Response response = await http.post(
+      Uri.parse(signOutUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      String successBody = json.decode(response.body);
+
+      return Right(successBody);
+    } else {
+      Map<String,dynamic> errorBody = json.decode(response.body);
+      return  Left(errorBody);
+
+    }
+
+  }
 
 /////////////////////////////////////Project request//////////////////////////////////
   Future<Either<String, List<dynamic>>> getAllProjects() async {
 
-    String getProjectUrl = 'http://192.168.0.106:8000/get_project/';
+    String getProjectUrl = '${API.baseUrl}get_project/';
     Response response = await http.get(Uri.parse(getProjectUrl));
 
     if (response.statusCode == 200) {
@@ -36,7 +85,8 @@ class RestClient {
 
   Future<Either<String, Map<String, dynamic>>> addProject( Map<String, dynamic> data,) async {
 
-    String addProjectUrl = 'http://192.168.0.106:8000/add_project/';
+    String addProjectUrl = '${API.baseUrl}add_project/';
+
 
   final response = await http.post(
     Uri.parse(addProjectUrl),
@@ -57,7 +107,7 @@ class RestClient {
 
 
   Future<Either<String, Map<String, dynamic>>> updateProject( Map<String, dynamic> data,String projectId) async {
-    String updateTaskUrl =  'http://192.168.0.106:8000/update_project/$projectId';
+    String updateTaskUrl =  '${API.baseUrl}update_project/$projectId';
     final response = await http.put(
         Uri.parse(updateTaskUrl),
         headers: <String, String>{
@@ -74,7 +124,7 @@ class RestClient {
   }
 
   Future<Either<String,String>> deleteProject(String projectId) async {
-    final String apiUrl = 'http://192.168.0.106:8000/delete_project/$projectId';
+    final String apiUrl = '${API.baseUrl}delete_project/$projectId';
 
     final response = await http.delete(
       Uri.parse(apiUrl),
@@ -96,7 +146,7 @@ class RestClient {
 /////////////////////////////////////Task requests/////////////////////////////////////////////
   Future<Either<String, List<dynamic>>> getAllTasks(String projectId) async {
 
-    String getTaskUrl = 'http://192.168.0.106:8000/get_task/$projectId';
+    String getTaskUrl = '${API.baseUrl}get_task/$projectId';
     Response response = await http.get(Uri.parse(getTaskUrl));
 
     if (response.statusCode == 200) {
@@ -111,7 +161,7 @@ class RestClient {
   }
 
   Future<Either<String, Map<String, dynamic>>> addTask( Map<String, dynamic> data,String projectId) async {
-    String addTaskUrl = 'http://192.168.0.106:8000/add_task/$projectId';
+    String addTaskUrl = '${API.baseUrl}add_task/$projectId';
     final response = await http.post(
       Uri.parse(addTaskUrl),
       headers: <String, String>{
@@ -131,7 +181,7 @@ class RestClient {
 
 
   Future<Either<String, Map<String, dynamic>>> updateTask( Map<String, dynamic> data,String taskId) async {
-    String updateTaskUrl =  'http://192.168.0.106:8000/update_task/$taskId';
+    String updateTaskUrl =  '${API.baseUrl}update_task/$taskId';
     final response = await http.put(
       Uri.parse(updateTaskUrl),
       headers: <String, String>{
@@ -148,7 +198,7 @@ class RestClient {
   }
 
   Future<Either<String,String>> deleteTask(String taskId) async {
-    final String apiUrl = 'http://192.168.0.106:8000/delete_task/$taskId';
+    final String apiUrl = '${API.baseUrl}delete_task/$taskId';
 
     final response = await http.delete(
       Uri.parse(apiUrl),

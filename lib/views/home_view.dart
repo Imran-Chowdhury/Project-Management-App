@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:project_management_app/base_state/base_state.dart';
+import 'package:project_management_app/base_state/profile_state.dart';
 import 'package:project_management_app/models/project_model/project_model.dart';
 import 'package:project_management_app/models/task_model/task_model.dart';
 import 'package:project_management_app/utils/announcement_widget.dart';
@@ -19,12 +20,14 @@ import 'package:project_management_app/view_models/project_view_model.dart';
 import 'package:project_management_app/views/announcement_view.dart';
 import 'package:project_management_app/views/project_view.dart';
 import 'package:project_management_app/views/search_view.dart';
+import 'package:project_management_app/views/signin_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 import 'package:http/http.dart' as http;
 
 import '../utils/background_widget.dart';
+import '../view_models/profile_view_model.dart';
 
 
 
@@ -61,202 +64,236 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-   
 
+     String userName = '';
+     String refreshToken = '';
      final projectState = ref.watch( projectViewModelProvider);
      final projectController = ref.watch( projectViewModelProvider.notifier);
-
+     final profileState = ref.read(profileViewModelProvider);
+     if(profileState is ProfileSuccessState){
+       userName = profileState.data.name;
+       refreshToken = profileState.data.tokens['refresh'];
+       print(userName);
+     }
 
     DateTime now = DateTime.now();
 
     String formattedDate = DateFormat('dd MMM yyyy').format(now);
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    final Size size = MediaQuery. of(context).size;
+    double width = size.width;
+    double height = size.height;
 
 
-   return  Scaffold(
-     backgroundColor: Colors.white,
 
-     body:
-    //  Padding(
-    //    padding: const EdgeInsets.all(20.0),
-    //    child: (projectState is LoadingState) ?
-    //    const Center(
-    //             child: CircularProgressIndicator(),
-    //           )  :    Stack(
-    //      children: [
-    //       Column(
-    //      children: [
-    //        Row(
-    //          children: [
-    //            Container(
-    //              height: 70.0,
-    //              width: 70.0,
-    //              color: Colors.blueAccent,
-    //              ),
-    //             const SizedBox(width: 10.0,),
-    //              Column(
-    //                children: [
-    //                const Text('Hi, Imran',
-    //                  style: TextStyle(
-    //                  fontWeight: FontWeight.bold, fontSize: 20.0),
-    //                ),
-    //                     Text(formattedDate),
-    //                ],
-    //              ),
-    //          ],
-    //        ),
-    //
-    //        const SizedBox(height: 20.0,),
-    //
-    //        headings('Projects'),
-    //
-    //
-    //
-    //
-    //        (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
-    //        horizontalSlider(projectList,projectController ),
-    //
-    //
-    //
-    //
-    //        const SizedBox(height: 20.0,),
-    //
-    //        headings("Today's Tasks"),
-    //
-    //        todayTaskList(),
-    //
-    //         ],
-    //       ),
-    //
-    //
-    //        if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
-    //           const Center(
-    //             child: CircularProgressIndicator(),
-    //           ),
-    //
-    //
-    //
-    //     ],
-    //    ),
-    //
-    // ),
-       Stack(
-         children: [
+   return  PopScope(
+
+     child: Scaffold(
+       backgroundColor: Colors.white,
+
+       body:
+      //  Padding(
+      //    padding: const EdgeInsets.all(20.0),
+      //    child: (projectState is LoadingState) ?
+      //    const Center(
+      //             child: CircularProgressIndicator(),
+      //           )  :    Stack(
+      //      children: [
+      //       Column(
+      //      children: [
+      //        Row(
+      //          children: [
+      //            Container(
+      //              height: 70.0,
+      //              width: 70.0,
+      //              color: Colors.blueAccent,
+      //              ),
+      //             const SizedBox(width: 10.0,),
+      //              Column(
+      //                children: [
+      //                const Text('Hi, Imran',
+      //                  style: TextStyle(
+      //                  fontWeight: FontWeight.bold, fontSize: 20.0),
+      //                ),
+      //                     Text(formattedDate),
+      //                ],
+      //              ),
+      //          ],
+      //        ),
+      //
+      //        const SizedBox(height: 20.0,),
+      //
+      //        headings('Projects'),
+      //
+      //
+      //
+      //
+      //        (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
+      //        horizontalSlider(projectList,projectController ),
+      //
+      //
+      //
+      //
+      //        const SizedBox(height: 20.0,),
+      //
+      //        headings("Today's Tasks"),
+      //
+      //        todayTaskList(),
+      //
+      //         ],
+      //       ),
+      //
+      //
+      //        if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
+      //           const Center(
+      //             child: CircularProgressIndicator(),
+      //           ),
+      //
+      //
+      //
+      //     ],
+      //    ),
+      //
+      // ),
+         Stack(
+           children: [
 
 
-          // BackgroudContainer( image: "assets/images/home.jpg",),
-          //  BackgroudContainer(),
-           Padding(
-           padding: const EdgeInsets.all(20.0),
-           child: (projectState is LoadingState) ?
-           const Center(
-             child: CircularProgressIndicator(),
-           )  :    Stack(
-             children: [
-               Column(
-                 children: [
-                   Row(
-                     children: [
-                       Container(
-                         height: 70.0,
-                         width: 70.0,
-                         color: Colors.blueAccent,
-                       ),
-                       const SizedBox(width: 10.0,),
-                       Column(
-                         children: [
-                           const Text('Hi, Imran',
-                             style: TextStyle(
-                                 fontWeight: FontWeight.bold, fontSize: 20.0),
+            // BackgroudContainer( image: "assets/images/home.jpg",),
+            //  BackgroudContainer(),
+             Padding(
+             padding: const EdgeInsets.all(20.0),
+             child: (projectState is LoadingState) ?
+             const Center(
+               child: CircularProgressIndicator(),
+             )  :    Stack(
+               children: [
+                 Column(
+                   children: [
+                     Row(
+                       children: [
+                        const Icon(
+                             Icons.person,
+                         size: 70,),
+
+
+                         const SizedBox(width: 10.0,),
+                         Column(
+                           children: [
+                             Text('Hi, $userName',
+                               style: const TextStyle(
+                                   fontWeight: FontWeight.bold, fontSize: 20.0),
+                             ),
+                             Text(formattedDate),
+                           ],
+                         ),
+                         const SizedBox(width: 120.0,),
+                         IconButton(
+                           iconSize: 30.0, // Specify the size directly
+                           onPressed: () async {
+                             // Perform logout action here
+                             await ref.read(profileViewModelProvider.notifier).logout(refreshToken,context);
+
+                             // After logout, navigate to SignInScreen or any desired screen
+                             Navigator.pushAndRemoveUntil(
+                               context,
+                               MaterialPageRoute(builder: (context) => SignInScreen()),
+                                   (route) => false, // This ensures the back button will exit the app
+                             );
+                           },
+                           icon: const Icon(
+                             Icons.exit_to_app_outlined,
                            ),
-                           Text(formattedDate),
-                         ],
-                       ),
-                     ],
-                   ),
-
-                   const SizedBox(height: 20.0,),
-
-                   headings('Projects'),
+                         )
 
 
+                       ],
+                     ),
 
+                     const SizedBox(height: 20.0,),
 
-                   (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
-                   horizontalSlider(projectList,projectController ),
+                     headings('Projects'),
 
 
 
 
-                   const SizedBox(height: 20.0,),
-
-                   headings("Announcements"),
-
-                   // announcements(),
-
-                   AnnouncementWidget(),
-                 ],
-               ),
+                     (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
+                     horizontalSlider(projectList,projectController ),
 
 
-               if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
-                 const Center(
-                   child: CircularProgressIndicator(),
+
+
+                     const SizedBox(height: 20.0,),
+
+                     headings("Announcements"),
+
+                     // announcements(),
+
+                     AnnouncementWidget(width:width, height: height,),
+                   ],
                  ),
 
 
+                 if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
+                   const Center(
+                     child: CircularProgressIndicator(),
+                   ),
 
-             ],
+
+
+               ],
+             ),
            ),
+         ],),
 
-         ),
-       ],),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.home),
+                onPressed: () {
+                  // Handle press
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  // Handle press
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  SearchScreen(allProjects: projectList,)),
+                  );
+                },
+              ),
+              const SizedBox(width: 40), // This creates space for the round button
+              IconButton(
+                icon: const Icon(Icons.notifications),
+                onPressed: () {
+                  // Handle press
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  NotificationScreen()),
+                  );
 
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.home),
-              onPressed: () {
-                // Handle press
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                // Handle press
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  SearchScreen(allProjects: projectList,)),
-                );
-              },
-            ),
-            const SizedBox(width: 40), // This creates space for the round button
-            IconButton(
-              icon: const Icon(Icons.notifications),
-              onPressed: () {
-                // Handle press
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  NotificationScreen()),
-                );
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: ()async {
+                  // Handle press
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.clear();
 
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                // Handle press
-
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
+        floatingActionButton: add(context,_formKey, projectController, projectState,projectList ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
-      floatingActionButton: add(context,_formKey, projectController, projectState,projectList ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
+   );
   }
 
 
@@ -440,42 +477,6 @@ Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier pr
       ): const Center(child: Text('Start by adding a project'),);
 }
 
-Widget announcements(){
-  return  Expanded(
-         child: ListView.builder(
-          itemCount: 15, // Number of items
-          itemBuilder: (context, index) {
-            return Row(
-              children: [
-                const Icon(Icons.arrow_forward_ios),
-              Column(children: [
-                Material(
-                  color: Color(0xFFD1BABA),
-                  elevation: 8.0, // Set the elevation
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Container(
-                    height: 100,
-                    width: 330,// Adjust height as needed
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: Color(0xFFD1BABA),
-                    ),
-                    margin: const EdgeInsets.all(5), // Add margin for spacing
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'To be implemented',
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10,),
-              ],),
-              ],
-            );
-          },
-               ),
-       );
-}
 
 Widget headings(String projectOrTask) {
   return Row(

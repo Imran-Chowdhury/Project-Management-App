@@ -7,8 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AnnouncementWidget extends ConsumerStatefulWidget {
   @override
   ConsumerState<AnnouncementWidget> createState() => _AnnouncementWidgetState();
+  AnnouncementWidget({required this.width,required this.height});
 
-
+  double height;
+  double width;
 
 }
 
@@ -47,8 +49,8 @@ class _AnnouncementWidgetState extends ConsumerState<AnnouncementWidget> {
                   elevation: 8.0, // Set the elevation
                   borderRadius: BorderRadius.circular(20.0),
                   child: Container(
-                    height: 100,
-                    width: 330,// Adjust height as needed
+                    height: widget.height * 0.1,
+                    width: widget.width *0.8,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
                       gradient: const LinearGradient(colors: [Color(0xFFE8A99B),Color(0xFFE8A99B),]),

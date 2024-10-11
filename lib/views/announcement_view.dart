@@ -31,6 +31,9 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     // 4. use ref.watch() to get the value of the provider
+    final Size size = MediaQuery. of(context).size;
+    double width = size.width;
+    double height = size.height;
 
     return  Scaffold(
       appBar: AppBar(
@@ -45,7 +48,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
       body: Column(
         children: [
 
-          AnnouncementWidget(),
+          AnnouncementWidget(height: height,width: width,),
         ],
       ),
     );
