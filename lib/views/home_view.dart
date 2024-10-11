@@ -195,7 +195,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                              await ref.read(profileViewModelProvider.notifier).logout(refreshToken,context);
 
                              // After logout, navigate to SignInScreen or any desired screen
-                             Navigator.pushAndRemoveUntil(
+                            await Navigator.pushAndRemoveUntil(
                                context,
                                MaterialPageRoute(builder: (context) => SignInScreen()),
                                    (route) => false, // This ensures the back button will exit the app

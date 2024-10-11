@@ -1,8 +1,10 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project_management_app/base_state/profile_state.dart';
 import 'package:project_management_app/utils/validator.dart';
 import 'package:project_management_app/view_models/profile_view_model.dart';
+import 'package:project_management_app/views/signup_view.dart';
 import 'package:project_management_app/widgets/custom_button.dart';
 import 'package:project_management_app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -60,13 +62,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   labelText: 'Username',
                   validate: Validator.personNameValidator,
                 ),
-                SizedBox(height: height * 0.04),
+                SizedBox(height: height * 0.02),
                 CustomTextField(
                   controller: _passwordController,
                   labelText: 'Password',
                   validate: Validator.passwordValidator,
                 ),
-                SizedBox(height: height * 0.1),
+                // SizedBox(height: width * 0.1),
+                const SizedBox(height: 20),
                 Padding(
                   padding: EdgeInsets.only(left: width * 0.2, right: width * 0.2),
                   child: CustomButton(
@@ -81,25 +84,41 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       if (_formKey.currentState!.validate()) {
                         // Perform the sign-in logic
                         profileController.logIn(
-                          _nameController.text,
-                          _passwordController.text,
+                          _nameController.text.trim(),
+                          _passwordController.text.trim(),
                           context
                         );
-                        // logIn(profileController);
-                        // if(profileState is ProfileSuccessState){
-                        //   Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => HomeScreen(),
-                        //     ),
-                        //   );
-                        // }
                       }
                     },
 
 
                   ),
                 ),
+                const SizedBox(height: 10),
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  const  Text(
+                      "Don't have an account?",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                   const SizedBox(width: 5,),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context)=>const SignUpScreen()));
+                      },
+                      child: const Text(
+                          "Sign up!",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ),
+                  ],),
               ],
             ),
           ),
@@ -107,98 +126,5 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       ),
     );
   }
-  //
-  // Future<void> logIn(ProfileViewModelNotifier profileController)async {
-  //  await profileController.logIn(
-  //     _nameController.text,
-  //     _passwordController.text,
-  //   );
-  // }
+
 }
-
-
-// class SignInScreen extends StatefulWidget {
-//   @override
-//   _SignInScreenState createState() => _SignInScreenState();
-// }
-//
-// class _SignInScreenState extends State<SignInScreen> {
-//   final _formKey = GlobalKey<FormState>();
-//   final TextEditingController _nameController = TextEditingController();
-//   final TextEditingController _emailController = TextEditingController();
-//   final TextEditingController _passwordController = TextEditingController();
-//   final TextEditingController _confirmPasswordController = TextEditingController();
-//   ProfileViewModelNotifier profileController =
-//   @override
-//   Widget build(BuildContext context) {
-//
-//     final Size size = MediaQuery. of(context).size;
-//     double width = size.width;
-//     double height = size.height;
-//
-//     return Scaffold(
-//       backgroundColor: const Color(0XFFffffff) ,
-//
-//       body: SingleChildScrollView(
-//         child: Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Form(
-//             key: _formKey,
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.start,
-//               crossAxisAlignment: CrossAxisAlignment.stretch,
-//               children: [
-//                 Image.asset(
-//                   'assets/images/signin.png', // Your image path
-//                   height: height*.5, // Adjust the height as needed
-//                 ),
-//
-//
-//                 SizedBox(height: height*.0001),
-//                 const Text(
-//                   'SIGN IN',
-//                   style: TextStyle(
-//                       fontSize: 25,
-//                       fontWeight: FontWeight.bold
-//                   ),
-//                 ),
-//                 SizedBox(height: height*.02),
-//                 CustomTextField(controller: _nameController, labelText: 'Username', validate: Validator.personNameValidator),
-//                 SizedBox(height: height*.04),
-//
-//                 // CustomTextField(controller: _emailController, labelText: 'Email', validate: Validator.emailValidator),
-//                 // SizedBox(height: height*.04),
-//
-//                 CustomTextField(controller: _passwordController, labelText: 'Password', validate: Validator.passwordValidator),
-//                 SizedBox(height: height*.1),
-//
-//                 // CustomTextField(controller: _confirmPasswordController, labelText: 'Confirm Password', validate: Validator.confirmPasswordValidator),
-//                 // SizedBox(height: height*.04),
-//                 Padding(
-//                   padding:  EdgeInsets.only(left: width *0.2,right: width*0.2),
-//                   child: CustomButton(
-//                     screenHeight: height,
-//                     buttonName: 'SignIn',
-//                     buttonColor: const Color(0xFF00bfa6),
-//                     icon: const Icon(
-//                       Icons.login_outlined,
-//                       color: Colors.white,),
-//
-//                     onpressed: () {
-//                       if (_formKey.currentState!.validate()) {
-//
-//
-//                       }
-//                     },
-//
-//                   ),
-//                 ),
-//
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

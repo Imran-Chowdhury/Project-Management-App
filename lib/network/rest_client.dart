@@ -18,6 +18,34 @@ final restClientProvider = Provider((ref) => RestClient());
 
 class RestClient {
 /////////////////////////////////////User///////////////////////////////
+
+  Future<Either<Map<String,dynamic>, Map<String,dynamic>>> signUp(Map<String,dynamic> data) async {
+
+    String getSignUpUrl = '${API.baseUrl}register/';
+    Response response = await http.post(
+      Uri.parse(getSignUpUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 201) {
+      Map<String,dynamic> successBody = json.decode(response.body);
+
+      return Right(successBody);
+    } else {
+      Map<String,dynamic> errorBody = json.decode(response.body);
+      return  Left(errorBody);
+
+    }
+
+  }
+
+
+
+
   Future<Either<Map<String,dynamic>, Map<String,dynamic>>> signIn(Map<String,dynamic> data) async {
 
     String getSignInUrl = '${API.baseUrl}login/';
@@ -41,6 +69,9 @@ class RestClient {
     }
 
   }
+
+
+
 
   Future<Either<Map<String,dynamic>,String>> signOut(Map<String,dynamic> data) async {
 
