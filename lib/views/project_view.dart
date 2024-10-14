@@ -295,69 +295,77 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
 
 
 
+              TaskDialog(
+                  taskList: widget.taskList,
+                  projectId: widget.projectId.toString(),
+                  accessToken: widget.accessToken,
+                  taskController: taskController
+              );
 
 
-
-              AlertDialog(
-              title: const Text('Add ta new task'),
-              contentPadding: const EdgeInsets.all(24),
-              // Adjust padding for bigger size
-              content: Form(
-                key: formKey,
-                // mainAxisSize: MainAxisSize.min,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: titleController,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter Task',
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter a task';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel'),
-                ),
-
-                TextButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      // Validation passed, proceed with saving
-
-
-                      String title = titleController.text.trim();
-
-
-                      Map<String, dynamic> newTask = {
-                        "task_name": title,
-                        "completed": false
-                      };
-
-
-                      taskController.addTask(widget.taskList, newTask,
-                          widget.projectId.toString());
-
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text('Save'),
-                ),
-              ],
-            );
+            //   AlertDialog(
+            //   title: const Text('Add ta new task'),
+            //   contentPadding: const EdgeInsets.all(24),
+            //   // Adjust padding for bigger size
+            //   content: Form(
+            //     key: formKey,
+            //     // mainAxisSize: MainAxisSize.min,
+            //     child: Column(
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         TextFormField(
+            //           controller: titleController,
+            //           decoration: const InputDecoration(
+            //             hintText: 'Enter Task',
+            //           ),
+            //           validator: (value) {
+            //             if (value!.isEmpty) {
+            //               return 'Please enter a task';
+            //             }
+            //             return null;
+            //           },
+            //         ),
+            //         const SizedBox(height: 16),
+            //
+            //       ],
+            //     ),
+            //   ),
+            //   actions: <Widget>[
+            //     TextButton(
+            //       onPressed: () {
+            //         Navigator.of(context).pop();
+            //       },
+            //       child: const Text('Cancel'),
+            //     ),
+            //
+            //     TextButton(
+            //       onPressed: () {
+            //         if (formKey.currentState!.validate()) {
+            //           // Validation passed, proceed with saving
+            //
+            //
+            //           String title = titleController.text.trim();
+            //
+            //
+            //           Map<String, dynamic> newTask = {
+            //             "task_name": title,
+            //             "completed": false,
+            //             "deadline": '',
+            //
+            //
+            //           };
+            //
+            //
+            //           taskController.addTask(widget.taskList, newTask,
+            //               widget.projectId.toString(), widget.accessToken);
+            //
+            //           Navigator.of(context).pop();
+            //         }
+            //       },
+            //       child: const Text('Save'),
+            //     ),
+            //   ],
+            // );
           },
         );
       },
@@ -376,7 +384,8 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
               Checkbox(
                 value: taskList[index].completed,
                 onChanged: (bool? value) {
-                  taskController.toggleTaskCompletion(taskList,index,taskList[index]);
+                  taskController.toggleTaskCompletion(taskList,index,taskList[index],
+                      widget.projectId.toString());
                 },
                 checkColor: Colors.white,
                 activeColor: Colors.pink,
@@ -458,7 +467,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
               title: const Text('Delete'),
               onTap: () {
                 // Handle delete logic
-                taskController.deleteTask(listOfTasks, index, taskID.toString());
+                taskController.deleteTask(listOfTasks, index, taskID.toString(), widget.projectId.toString());
                 Navigator.pop(context);
               },
             ),
@@ -508,7 +517,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
 
 
 
-                taskController.updateTask(listOfTasks, index, updatedTask, taskID.toString());
+                taskController.updateTask(listOfTasks, index, updatedTask, taskID.toString(),widget.projectId.toString());
 
                 Navigator.of(context).pop();
               },
@@ -520,4 +529,125 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
   }
 
 
+}
+
+
+
+class TaskDialog extends StatefulWidget {
+  final List<Task> taskList;
+  final String projectId;
+  final String accessToken;
+  TaskViewModelNotifier taskController;
+
+ TaskDialog({
+    Key? key,
+    required this.taskList,
+    required this.projectId,
+    required this.accessToken,
+    required this.taskController
+  }) : super(key: key);
+
+  @override
+  _TaskDialogState createState() => _TaskDialogState();
+}
+
+class _TaskDialogState extends State<TaskDialog> {
+  final formKey = GlobalKey<FormState>();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController deadlineController = TextEditingController();
+  DateTime? selectedDate;
+
+  // Date picker method
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: now, // Prevents selection of past dates
+      lastDate: DateTime(2101),
+      helpText: 'Select Deadline Date',
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        deadlineController.text = DateFormat('yyyy-MM-dd').format(selectedDate!);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Add a new task'),
+      contentPadding: const EdgeInsets.all(24),
+      content: Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                hintText: 'Enter Task',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a task';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: deadlineController,
+              decoration: const InputDecoration(
+                hintText: 'Pick Deadline Date',
+              ),
+              readOnly: true,
+              onTap: () {
+                _selectDate(context); // Open date picker on tap
+              },
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please select a deadline date';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              // Validation passed, proceed with saving
+              String title = titleController.text.trim();
+              String deadline = deadlineController.text.trim();
+
+              Map<String, dynamic> newTask = {
+                "task_name": title,
+                "completed": false,
+                "deadline": deadline, // Add the deadline to the task data
+              };
+
+              widget.taskController.addTask(widget.taskList, newTask,
+                  widget.projectId.toString(), widget.accessToken);
+
+              Navigator.of(context).pop();
+            }
+          },
+          child: const Text('Save'),
+        ),
+      ],
+    );
+  }
 }

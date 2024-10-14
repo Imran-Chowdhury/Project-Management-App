@@ -84,8 +84,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           await profileController.signUp(
                               _nameController.text.trim(),
                               _passwordController.text.trim(),
-                              _passwordController.text.trim(),
                               _confirmPasswordController.text.trim(),
+                              _emailController.text.trim(),
                               context
                           );
                         }

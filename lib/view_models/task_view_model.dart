@@ -42,9 +42,10 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
     return allTasks;
   }
 
-  Future<void> addTask(List<Task> listOfTasks, Map<String,dynamic> data, String prjectID)async{
+  Future<void> addTask(List<Task> listOfTasks,
+      Map<String,dynamic> data, String projectId, String token)async{
     state = const LoadingState();
-    final res = await restClient.addTask(data,prjectID);
+    final res = await restClient.addTask(data,projectId, token);
 
     res.fold((L) {
       state = ErrorState(L);
@@ -65,9 +66,10 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
   }
 
 
-  Future<void> updateTask(List<Task> listOfTasks,int index, Map<String,dynamic> data, String taskID)async{
+  Future<void> updateTask(List<Task> listOfTasks,
+      int index, Map<String,dynamic> data, String taskId, String projectId)async{
     state = const LoadingState();
-    final res = await restClient.updateTask(data,taskID);
+    final res = await restClient.updateTask(data,taskId,projectId);
 
     res.fold((L) {
       state = ErrorState(L);
@@ -88,9 +90,9 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
 
   }
 
-  Future<void> deleteTask(List<Task> listOfTasks,int index, String taskID)async{
+  Future<void> deleteTask(List<Task> listOfTasks,int index, String taskId,String projectId)async{
     state = const LoadingState();
-    final res = await restClient.deleteTask(taskID);
+    final res = await restClient.deleteTask(projectId,taskId);
 
 
     res.fold((L) {
@@ -108,7 +110,7 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
 
   }
 
-  Future<void> toggleTaskCompletion(List<Task>listOfTask, int index, Task task) async {
+  Future<void> toggleTaskCompletion(List<Task>listOfTask, int index, Task task, String projectId) async {
     final updatedTask = task.copyWith(completed: !task.completed);
     // listOfTask[index] = updatedTask;
     // state = SuccessState(data: listOfTask);
@@ -119,7 +121,7 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
     };
     String taskID = updatedTask.id.toString();
 
-    await updateTask(listOfTask , index,  data, taskID);
+    await updateTask(listOfTask , index,  data, taskID,projectId);
   }
 
 

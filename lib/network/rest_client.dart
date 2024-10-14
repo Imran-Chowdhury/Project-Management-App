@@ -85,7 +85,7 @@ class RestClient {
       body: jsonEncode(data),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 205) {
       String successBody = json.decode(response.body);
 
       return Right(successBody);
@@ -224,12 +224,17 @@ class RestClient {
 
 
 
-  Future<Either<String, Map<String, dynamic>>> addTask( Map<String, dynamic> data,String projectId) async {
-    String addTaskUrl = '${API.baseUrl}add_task/$projectId';
+  Future<Either<String, Map<String, dynamic>>>
+  addTask( Map<String, dynamic> data,String projectId, String token) async {
+    // String addTaskUrl = '${API.baseUrl}add_task/$projectId';
+    String addTaskUrl = '${API.baseUrl}projects/$projectId/tasks/add/';
+
+
     final response = await http.post(
       Uri.parse(addTaskUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
       },
 
       body: jsonEncode(data),
@@ -244,8 +249,9 @@ class RestClient {
   }
 
 
-  Future<Either<String, Map<String, dynamic>>> updateTask( Map<String, dynamic> data,String taskId) async {
-    String updateTaskUrl =  '${API.baseUrl}update_task/$taskId';
+  Future<Either<String, Map<String, dynamic>>> updateTask( Map<String, dynamic> data,String taskId, String projectId) async {
+    // String updateTaskUrl =  '${API.baseUrl}update_task/$taskId';
+    String updateTaskUrl = '${API.baseUrl}projects/$projectId/tasks/$taskId/update/';
     final response = await http.put(
       Uri.parse(updateTaskUrl),
       headers: <String, String>{
@@ -261,13 +267,16 @@ class RestClient {
     }
   }
 
-  Future<Either<String,String>> deleteTask(String taskId) async {
-    final String apiUrl = '${API.baseUrl}delete_task/$taskId';
+  Future<Either<String,String>> deleteTask(String projectId,String taskId) async {
+    // final String apiUrl = '${API.baseUrl}delete_task/$taskId';
+    final String apiUrl = '${API.baseUrl}projects/$projectId/tasks/$taskId/delete/';
+
 
     final response = await http.delete(
       Uri.parse(apiUrl),
       headers: {
         'Content-Type': 'application/json',
+
       },
     );
 
