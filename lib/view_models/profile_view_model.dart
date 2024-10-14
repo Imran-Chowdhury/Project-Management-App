@@ -104,19 +104,23 @@ class ProfileViewModelNotifier extends StateNotifier<ProfileState>{
         // Parse the JSON response into the Profile model
         profile = Profile.fromjson(R);
 
-        // Save profile to shared preferences (you can handle this later)
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('profile', jsonEncode(R));
+        // SharedPreferences prefs = await SharedPreferences.getInstance();
+        // prefs.setString('profile', jsonEncode(R));
 
         Fluttertoast.showToast(msg: 'User registered successfully');
-        state = ProfileSuccessState(data: profile!);
+        // state = ProfileSuccessState(data: profile!);
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => HomeScreen(),
+        //   ),
+        // );
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => SignInScreen(),
           ),
         );
-
 
       }else{
         state = const ProfileErrorState('An error occurred');

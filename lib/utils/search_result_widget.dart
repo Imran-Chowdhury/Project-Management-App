@@ -7,7 +7,7 @@ import 'package:project_management_app/views/search_view.dart';
 import '../models/project_model/project_model.dart';
 import '../views/project_view.dart';
 
-Widget searchResultTile(List<Project> filteredProjects, int index, BuildContext context){
+Widget searchResultTile(List<Project> filteredProjects, int index, BuildContext context , int userId, String accessToken){
   return  Padding(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
@@ -17,7 +17,10 @@ Widget searchResultTile(List<Project> filteredProjects, int index, BuildContext 
           context,
           MaterialPageRoute(builder: (context) =>  ProjectScreen(
             projectName:filteredProjects[index].name,
+            description:filteredProjects[index].description,
             projectId: filteredProjects[index].id,
+            userId: userId ,
+            accessToken: accessToken,
           )),
         );
       },

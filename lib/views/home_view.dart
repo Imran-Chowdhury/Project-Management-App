@@ -64,16 +64,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-
+     int userId = 0;
      String userName = '';
      String refreshToken = '';
+     String accessToken = '';
      final projectState = ref.watch( projectViewModelProvider);
      final projectController = ref.watch( projectViewModelProvider.notifier);
      final profileState = ref.read(profileViewModelProvider);
      if(profileState is ProfileSuccessState){
        userName = profileState.data.name;
        refreshToken = profileState.data.tokens['refresh'];
+       accessToken = profileState.data.tokens['access'];
+       userId =  profileState.data.id;
        print(userName);
+       print(userId);
+       print(accessToken);
      }
 
     DateTime now = DateTime.now();
@@ -90,217 +95,233 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
      child: Scaffold(
        backgroundColor: Colors.white,
+       appBar: AppBar(
+         title: Text('Projects',style: TextStyle(fontWeight: FontWeight.bold),),
+         backgroundColor: Color(0XFFD3D3D3),
+         // leading: IconButton(
+         //   icon: const Icon(Icons.arrow_back_outlined),
+         //   onPressed: () {  },
+         // ),
+         actions: [
+           IconButton(
+             iconSize: 30.0, // Specify the size directly
+             onPressed: () async {
+               // Perform logout action here
+               await ref.read(profileViewModelProvider.notifier).logout(refreshToken,context);
 
-       body:
-      //  Padding(
-      //    padding: const EdgeInsets.all(20.0),
-      //    child: (projectState is LoadingState) ?
-      //    const Center(
-      //             child: CircularProgressIndicator(),
-      //           )  :    Stack(
-      //      children: [
-      //       Column(
-      //      children: [
-      //        Row(
-      //          children: [
-      //            Container(
-      //              height: 70.0,
-      //              width: 70.0,
-      //              color: Colors.blueAccent,
-      //              ),
-      //             const SizedBox(width: 10.0,),
-      //              Column(
-      //                children: [
-      //                const Text('Hi, Imran',
-      //                  style: TextStyle(
-      //                  fontWeight: FontWeight.bold, fontSize: 20.0),
-      //                ),
-      //                     Text(formattedDate),
-      //                ],
-      //              ),
-      //          ],
-      //        ),
-      //
-      //        const SizedBox(height: 20.0,),
-      //
-      //        headings('Projects'),
-      //
-      //
-      //
-      //
-      //        (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
-      //        horizontalSlider(projectList,projectController ),
-      //
-      //
-      //
-      //
-      //        const SizedBox(height: 20.0,),
-      //
-      //        headings("Today's Tasks"),
-      //
-      //        todayTaskList(),
-      //
-      //         ],
-      //       ),
-      //
-      //
-      //        if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
-      //           const Center(
-      //             child: CircularProgressIndicator(),
-      //           ),
-      //
-      //
-      //
-      //     ],
-      //    ),
-      //
-      // ),
-         Stack(
+               // After logout, navigate to SignInScreen or any desired screen
+               await Navigator.pushAndRemoveUntil(
+                 context,
+                 MaterialPageRoute(builder: (context) => SignInScreen()),
+                     (route) => false, // This ensures the back button will exit the app
+               );
+             },
+             icon: const Icon(
+               Icons.exit_to_app_outlined,
+             ),
+           )
+         ],
+       ),
+
+       body: Stack(
            children: [
 
+             BackgroundContainer(),
+            Padding(
+              padding: EdgeInsets.only(top: height*0.55),
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft:Radius.circular(40),topRight: Radius.circular(40)),
+                  // color: Color(0XFFffffff),
+                  color: Color(0XFFffda21),
+                ),
+                width: double.infinity,
+                height: height*0.8,
 
-            // BackgroudContainer( image: "assets/images/home.jpg",),
-            //  BackgroudContainer(),
+              ),
+            ),
+
              Padding(
-             padding: const EdgeInsets.all(20.0),
-             child: (projectState is LoadingState) ?
-             const Center(
-               child: CircularProgressIndicator(),
-             )  :    Stack(
-               children: [
-                 Column(
-                   children: [
-                     Row(
-                       children: [
-                        const Icon(
-                             Icons.person,
-                         size: 70,),
-
-
-                         const SizedBox(width: 10.0,),
-                         Column(
-                           children: [
-                             Text('Hi, $userName',
-                               style: const TextStyle(
-                                   fontWeight: FontWeight.bold, fontSize: 20.0),
-                             ),
-                             Text(formattedDate),
-                           ],
-                         ),
-                         const SizedBox(width: 120.0,),
-                         IconButton(
-                           iconSize: 30.0, // Specify the size directly
-                           onPressed: () async {
-                             // Perform logout action here
-                             await ref.read(profileViewModelProvider.notifier).logout(refreshToken,context);
-
-                             // After logout, navigate to SignInScreen or any desired screen
-                            await Navigator.pushAndRemoveUntil(
-                               context,
-                               MaterialPageRoute(builder: (context) => SignInScreen()),
-                                   (route) => false, // This ensures the back button will exit the app
-                             );
-                           },
-                           icon: const Icon(
-                             Icons.exit_to_app_outlined,
-                           ),
-                         )
-
-
-                       ],
-                     ),
-
-                     const SizedBox(height: 20.0,),
-
-                     headings('Projects'),
-
-
-
-
-                     (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
-                     horizontalSlider(projectList,projectController ),
-
-
-
-
-                     const SizedBox(height: 20.0,),
-
-                     headings("Announcements"),
-
-                     // announcements(),
-
-                     AnnouncementWidget(width:width, height: height,),
-                   ],
-                 ),
-
-
-                 if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
-                   const Center(
-                     child: CircularProgressIndicator(),
+               padding: const EdgeInsets.all(20),
+               child: Column(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                    SizedBox(
+                     height: height * .3,
                    ),
+                   Text('Hi, $userName',
+                     style: const TextStyle(
+                         fontWeight: FontWeight.bold, fontSize: 20.0),
+                   ),
+                  const Text(
+                      'Here are all your projects',
+                    style: TextStyle(
+                        fontSize: 14.0),
+                  ),
+                   const SizedBox(height: 10,),
+                   (projectState is SuccessState)?horizontalSlider(accessToken,userId,height,projectState.data, projectController):
+                   horizontalSlider(accessToken,userId,height,projectList,projectController ),
 
-
-
-               ],
+                   if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
+                     const Center(
+                       child: CircularProgressIndicator(),
+                     ),
+                 ],
+               ),
              ),
-           ),
-         ],),
+           //   Padding(
+           //   padding: EdgeInsets.all(20.0),
+           //   //   padding: EdgeInsets.only(top:  height*0.5),
+           //   child: (projectState is LoadingState) ?
+           //   const Center(
+           //     child: CircularProgressIndicator(),
+           //   )  :    Stack(
+           //     children: [
+           //       Column(
+           //         children: [
+           //
+           //           Row(
+           //             children: [
+           //              const Icon(
+           //                   Icons.person,
+           //               size: 70,),
+           //
+           //
+           //               const SizedBox(width: 10.0,),
+           //               Column(
+           //                 children: [
+           //                   Text('Hi, $userName',
+           //                     style: const TextStyle(
+           //                         fontWeight: FontWeight.bold, fontSize: 20.0),
+           //                   ),
+           //                   Text(formattedDate),
+           //                 ],
+           //               ),
+           //               const SizedBox(width: 120.0,),
+           //               IconButton(
+           //                 iconSize: 30.0, // Specify the size directly
+           //                 onPressed: () async {
+           //                   // Perform logout action here
+           //                   await ref.read(profileViewModelProvider.notifier).logout(refreshToken,context);
+           //
+           //                   // After logout, navigate to SignInScreen or any desired screen
+           //                  await Navigator.pushAndRemoveUntil(
+           //                     context,
+           //                     MaterialPageRoute(builder: (context) => SignInScreen()),
+           //                         (route) => false, // This ensures the back button will exit the app
+           //                   );
+           //                 },
+           //                 icon: const Icon(
+           //                   Icons.exit_to_app_outlined,
+           //                 ),
+           //               )
+           //
+           //
+           //             ],
+           //           ),
+           //
+           //           const SizedBox(height: 20.0,),
+           //
+           //           // headings('Projects'),
+           //
+           //           // Container(
+           //           //   width: 250,
+           //           //   height: 150,
+           //           //   color: Colors.black ,
+           //           // ),
+           //
+           //
+           //
+           //
+           //           (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
+           //           horizontalSlider(projectList,projectController ),
+           //
+           //
+           //
+           //
+           //           const SizedBox(height: 40.0,),
+           //
+           //           // headings("Announcements"),
+           //
+           //
+           //
+           //           // AnnouncementWidget(width:width, height: height,),
+           //         ],
+           //       ),
+           //
+           //
+           //       if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
+           //         const Center(
+           //           child: CircularProgressIndicator(),
+           //         ),
+           //
+           //
+           //
+           //     ],
+           //   ),
+           // ),
+         ],
+       ),
 
-        bottomNavigationBar: BottomAppBar(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.home),
-                onPressed: () {
-                  // Handle press
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () {
-                  // Handle press
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>  SearchScreen(allProjects: projectList,)),
-                  );
-                },
-              ),
-              const SizedBox(width: 40), // This creates space for the round button
-              IconButton(
-                icon: const Icon(Icons.notifications),
-                onPressed: () {
-                  // Handle press
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>  NotificationScreen()),
-                  );
-
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: ()async {
-                  // Handle press
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await prefs.clear();
-
-                },
-              ),
-            ],
-          ),
+        // bottomNavigationBar: BottomAppBar(
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     children: [
+        //       IconButton(
+        //         icon: const Icon(Icons.home),
+        //         onPressed: () {
+        //           // Handle press
+        //         },
+        //       ),
+        //       IconButton(
+        //         icon: const Icon(Icons.search),
+        //         onPressed: () {
+        //           // Handle press
+        //           Navigator.push(
+        //             context,
+        //             MaterialPageRoute(builder: (context) =>  SearchScreen(allProjects: projectList,)),
+        //           );
+        //         },
+        //       ),
+        //       const SizedBox(width: 40), // This creates space for the round button
+        //       IconButton(
+        //         icon: const Icon(Icons.notifications),
+        //         onPressed: () {
+        //           // Handle press
+        //           Navigator.push(
+        //             context,
+        //             MaterialPageRoute(builder: (context) =>  NotificationScreen()),
+        //           );
+        //
+        //         },
+        //       ),
+        //       IconButton(
+        //         icon: const Icon(Icons.settings),
+        //         onPressed: ()async {
+        //           // Handle press
+        //           SharedPreferences prefs = await SharedPreferences.getInstance();
+        //           await prefs.clear();
+        //
+        //         },
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(right: 25,bottom: 20),
+          child: add(context,_formKey, projectController, projectState,projectList,userId.toString()),
         ),
-        floatingActionButton: add(context,_formKey, projectController, projectState,projectList ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
    );
   }
 
 
-Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNotifier projectController, final projectState,List<Project> list){
+Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNotifier projectController, final projectState,List<Project> list, String userId){
   // List<Project> list = [];
     return  FloatingActionButton(
-      backgroundColor: Colors.pink,
+      backgroundColor: const Color(0XFFD3D3D3),
       shape: const CircleBorder(),
       onPressed: () {
         showDialog(
@@ -361,15 +382,14 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNo
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       // Validation passed, proceed with saving
-
-
-
                       String title = titleController.text.trim();
                       String description = descriptionController.text.trim();
+                      print(userId);
 
                       Map<String,dynamic> newProject = {
                         "project_name" : title,
                         "description": description,
+                        'user_id': userId,
                       };
 
 
@@ -385,14 +405,17 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNo
           },
         );
       },
-      child: const Icon(Icons.add),
+      child: const Icon(
+        Icons.add,
+        color: Colors.black45,
+      ),
     );
 }
 
 
-Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier projectController){
-//   Widget horizontalSlider(final projectState){
-  // final projectState = ref.watch(projectViewModelProvider);
+Widget horizontalSlider(String accessToken,int userId, double height, List<Project> projectsList, ProjectViewModelNotifier projectController){
+    //  Widget horizontalSlider(final projectState){
+    // final projectState = ref.watch(projectViewModelProvider);
   List<Project> listOfProjects = projectsList;
   // if(projectState is SuccessState){
   //   listOfProjects = projectState.data;
@@ -415,7 +438,10 @@ Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier pr
                 context,
                 MaterialPageRoute(builder: (context) =>  ProjectScreen(
                   projectName:listOfProjects[index].name,
+                  description:listOfProjects[index].description,
                   projectId: listOfProjects[index].id,
+                  userId: userId ,
+                  accessToken: accessToken
                   )),
               );
             },
@@ -430,11 +456,18 @@ Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier pr
               child: Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [
-                    // Color(0xFF88a03d),
-                    // Color(0xFFC5C547)
-                    Color(0xFF912209),Color(0xFFC74426)
-                    ]),
+                //   border: const Border(
+                //       top: BorderSide(color: Colors.black),
+                //     right: BorderSide(color: Colors.black),
+                //     left: BorderSide(color: Colors.black),
+                //     bottom: BorderSide(color: Colors.black),
+                //   ),
+                  color:const Color(0XFFF5F5DC),
+                  // gradient: const LinearGradient(colors: [
+                  //
+                  //   // Color(0xFF45DFB1),Color(0xFF0AD1C8)
+                  //   Color(0xFF0B6477),Color(0xFF0AD1C8)
+                  //   ]),
                     //
                   // color: const Color(0xFF88a03d), // Container color
                   // color: const Color(0xFFC5C547), // Container color
@@ -442,12 +475,22 @@ Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier pr
 
                   borderRadius: BorderRadius.circular(20.0), // Same as Material's borderRadius
                 ),
-                 child:  Center(
-                   child: Text(
+                 child:  Column(
+                   children: [
+                     const SizedBox(height: 20,),
+                    const Icon(
+                       Icons.sticky_note_2_outlined,
+                       size: 80,
+                     ),
 
-                    listOfProjects[index].name,
-                    style: const  TextStyle(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 25.0),
-                   ),
+                     Center(
+                       child: Text(
+
+                         listOfProjects[index].name,
+                         style: const  TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 25.0),
+                       ),
+                     ),
+                   ],
                  ),
               ),
             ),
@@ -474,7 +517,12 @@ Widget horizontalSlider( List<Project> projectsList, ProjectViewModelNotifier pr
           autoPlayCurve: Curves.fastOutSlowIn,
           scrollDirection: Axis.horizontal,
         ),
-      ): const Center(child: Text('Start by adding a project'),);
+      ): const Center(
+        child: Text(
+          'Opp! No projects found. Start by adding a project',
+          // style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16.0),
+        ),
+      );
 }
 
 

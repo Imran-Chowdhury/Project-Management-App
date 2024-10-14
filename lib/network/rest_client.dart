@@ -175,21 +175,54 @@ class RestClient {
 
 
 /////////////////////////////////////Task requests/////////////////////////////////////////////
-  Future<Either<String, List<dynamic>>> getAllTasks(String projectId) async {
+//   Future<Either<String, List<dynamic>>> getAllTasks(String userId,String projectId) async {
+//
+//     String getTaskUrl = '${API.baseUrl}get_task/$projectId';
+//     Response response = await http.get(Uri.parse(getTaskUrl));
+//
+//     if (response.statusCode == 200) {
+//       List<dynamic> body = json.decode(response.body);
+//       print(body);
+//       return Right(body);
+//     } else {
+//       return const Left('Failed to load projects');
+//
+//     }
+//
+//   }
 
+
+  Future<Either<String, List<dynamic>>> getAllTasks(String userId, String projectId, String token) async {
+    // Build the URL
     String getTaskUrl = '${API.baseUrl}get_task/$projectId';
-    Response response = await http.get(Uri.parse(getTaskUrl));
 
+    // Set headers including the token for Authorization
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token', // Include the token in the Authorization header
+    };
+
+    // Make the GET request
+    Response response = await http.get(
+      Uri.parse(getTaskUrl),
+      headers: headers, // Pass the headers containing the token
+    );
+
+    // Check the response status
     if (response.statusCode == 200) {
+      // Decode the response body and return the task list
       List<dynamic> body = json.decode(response.body);
       print(body);
       return Right(body);
     } else {
-      return const Left('Failed to load projects');
-
+      // Return an error message if the request failed
+      return const Left('Failed to load tasks');
     }
-
   }
+
+
+
+
 
   Future<Either<String, Map<String, dynamic>>> addTask( Map<String, dynamic> data,String projectId) async {
     String addTaskUrl = '${API.baseUrl}add_task/$projectId';

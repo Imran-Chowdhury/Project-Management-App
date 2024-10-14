@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:project_management_app/base_state/base_state.dart';
 import 'package:project_management_app/models/task_model/task_model.dart';
+import 'package:project_management_app/utils/background_widget.dart';
 
 import 'package:project_management_app/view_models/task_view_model.dart';
 import 'package:project_management_app/views/pie_chart.dart';
@@ -19,10 +20,14 @@ import 'package:project_management_app/views/pie_chart.dart';
 class ProjectScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<ProjectScreen> createState() => _ProjectScreenState();
-  ProjectScreen({super.key, required this.projectName,required this.projectId});
+  ProjectScreen({super.key, required this.accessToken, required this.userId, required this.description, required this.projectName,required this.projectId});
 
   String projectName;
+  String description;
+  String accessToken;
   int projectId;
+  int userId;
+
   List<Task> taskList = [];
 }
 
@@ -37,10 +42,9 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
 
   Future<void> getTasks() async {
     print('bambam');
-    final taskController = ref.read(
-        taskViewModelProvider(widget.projectId).notifier);
-    widget.taskList =
-    await taskController.getTasks(widget.projectId.toString());
+    final taskController = ref.read(taskViewModelProvider(widget.projectId).notifier);
+    widget.taskList = await taskController.getTasks(widget.userId.toString(),
+        widget.projectId.toString(), widget.accessToken);
     print(widget.taskList);
   }
 
@@ -54,34 +58,70 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
 
     String priority = 'High';
     DateTime? selectedDate;
+    final Size size = MediaQuery. of(context).size;
+    double width = size.width;
+    double height = size.height;
 
-    // 4. use ref.watch() to get the value of the provider
-    // final helloWorld = ref.watch(helloWorldProvider);
     return SafeArea(
       child: Scaffold(
+        appBar:AppBar(
+          title: const Text('Tasks',
+            style: TextStyle(fontWeight: FontWeight.bold),),
+          backgroundColor: const Color(0XFFD3D3D3),
+          // leading: IconButton(
+          //   icon: const Icon(Icons.arrow_back_outlined),
+          //   onPressed: () {  },
+          // ),
+
+        ),
         backgroundColor: Colors.white,
         body: PageView(
           children: [
             Stack( // Wrap the Column with a Stack
               children: [
                 // BackgroudContainer(image: "assets/images/tasks.jpg",),
-                // BackgroudContainer(),
+                // BackgroundContainer(),
+
+                Padding(
+                  padding: EdgeInsets.only(top: height*0.2),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(topLeft:Radius.circular(40),topRight: Radius.circular(40)),
+                      // color: Color(0XFFffffff),
+                      color: Color(0XFFffda21),
+                    ),
+                    width: double.infinity,
+                    height: height*0.8,
+
+                  ),
+                ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20,),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Center(
-                        child: Text(
-                          widget.projectName,
-                          style: const TextStyle(
-                              color: Colors.black45,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        widget.projectName,
+                        style: const TextStyle(
+                            // color: Colors.black45,
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(left:10),
+                      child: Text(
+                        widget.description,
+                        style: const TextStyle(
+                            color: Colors.black45,
+                            fontSize: 20.0,
+                            // fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+
                     // (taskState is TaskSuccessState&&taskState.nameOfProject == projectName)?tasks(taskState.data): tasks(taskList),
                     (taskState is TaskSuccessState) ? tasks(taskState.data,taskController) : tasks(
                         widget.taskList,taskController),
@@ -154,7 +194,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
       TaskViewModelNotifier taskController, List<Task>? taskList,
       String projectTitle, ) {
     return FloatingActionButton(
-      backgroundColor: Colors.pinkAccent,
+      backgroundColor: const Color(0XFFD3D3D3),
       shape: const CircleBorder(),
       onPressed: () {
         showDialog(
@@ -398,7 +438,9 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
         },
       ),
     )
-        : const Center(child: Text('Add a task'));
+        : const SizedBox(width: 1,height: 1,);
+    // const Center(child: Text('Add a task'));,
+
   }
 
 
