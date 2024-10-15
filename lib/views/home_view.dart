@@ -119,11 +119,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
        appBar: AppBar(
          title:const Text('Projects',style: TextStyle(fontWeight: FontWeight.bold),),
          backgroundColor:const Color(0XFFD3D3D3),
-         // leading: IconButton(
-         //   icon: const Icon(Icons.arrow_back_outlined),
-         //   onPressed: () {  },
-         // ),
+
          actions: [
+
+           IconButton(
+             iconSize: 30.0, // Specify the size directly
+             onPressed: () async {
+
+
+               // After logout, navigate to SignInScreen or any desired screen
+               await Navigator.push(
+                 context,
+                 MaterialPageRoute(builder: (context) =>SearchScreen(
+                     allProjects: projectList, accessToken: accessToken)),
+
+               );
+             },
+             icon: const Icon(
+               Icons.search_sharp,
+             ),
+           ),
            IconButton(
              iconSize: 30.0, // Specify the size directly
              onPressed: () async {
@@ -140,7 +155,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
              icon: const Icon(
                Icons.exit_to_app_outlined,
              ),
-           )
+           ),
          ],
        ),
 
@@ -328,7 +343,7 @@ Widget horizontalSlider(String accessToken,int userId, double height, List<Proje
                   projectName:listOfProjects[index].name,
                   description:listOfProjects[index].description,
                   projectId: listOfProjects[index].id,
-                  userId: userId ,
+
                   accessToken: accessToken
                   )),
               );
@@ -344,22 +359,7 @@ Widget horizontalSlider(String accessToken,int userId, double height, List<Proje
               child: Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                //   border: const Border(
-                //       top: BorderSide(color: Colors.black),
-                //     right: BorderSide(color: Colors.black),
-                //     left: BorderSide(color: Colors.black),
-                //     bottom: BorderSide(color: Colors.black),
-                //   ),
                   color:const Color(0XFFF5F5DC),
-                  // gradient: const LinearGradient(colors: [
-                  //
-                  //   // Color(0xFF45DFB1),Color(0xFF0AD1C8)
-                  //   Color(0xFF0B6477),Color(0xFF0AD1C8)
-                  //   ]),
-                    //
-                  // color: const Color(0xFF88a03d), // Container color
-                  // color: const Color(0xFFC5C547), // Container color
-
 
                   borderRadius: BorderRadius.circular(20.0), // Same as Material's borderRadius
                 ),

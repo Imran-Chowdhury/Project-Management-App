@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
+
   String? Function(String?)? validate;
 
   CustomTextField({

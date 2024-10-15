@@ -20,13 +20,13 @@ import 'package:project_management_app/views/pie_chart.dart';
 class ProjectScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<ProjectScreen> createState() => _ProjectScreenState();
-  ProjectScreen({super.key, required this.accessToken, required this.userId, required this.description, required this.projectName,required this.projectId});
+  ProjectScreen({super.key, required this.accessToken, required this.description, required this.projectName,required this.projectId});
 
   String projectName;
   String description;
   String accessToken;
   int projectId;
-  int userId;
+  // int userId;
 
   List<Task> taskList = [];
 }
@@ -43,7 +43,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
   Future<void> getTasks() async {
     print('bambam');
     final taskController = ref.read(taskViewModelProvider(widget.projectId).notifier);
-    widget.taskList = await taskController.getTasks(widget.userId.toString(),
+    widget.taskList = await taskController.getTasks(
         widget.projectId.toString(), widget.accessToken);
     print(widget.taskList);
   }
@@ -187,7 +187,8 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                       widget.projectId.toString());
                 },
                 checkColor: Colors.white,
-                activeColor: const Color(0XFFD3D3D3),
+                activeColor: Colors.green,
+
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -201,7 +202,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color:const Color(0XFFF5F5DC),
-                        // color:  Colors.blue,
+                        // color:Colors.grey,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       height: 120,
@@ -233,7 +234,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                                 const  SizedBox(
                                   width: 10,
                                 ),
-                                Text(taskList[index].deadline, style: const TextStyle(color: Colors.black)),
+                                Text('Deadline: ${taskList[index].deadline}', style: const TextStyle(color: Colors.black)),
                               ],
                             ),
                           ],

@@ -275,7 +275,7 @@ class RestClient {
 //   }
 
 
-  Future<Either<String, List<dynamic>>> getAllTasks(String userId, String projectId, String token) async {
+  Future<Either<String, List<dynamic>>> getAllTasks(String projectId, String token) async {
     // Build the URL
     String getTaskUrl = '${API.baseUrl}get_task/$projectId';
 

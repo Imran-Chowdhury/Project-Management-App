@@ -22,10 +22,10 @@ class TaskViewModelNotifier extends StateNotifier<BaseState>{
 
   RestClient restClient;
 
-  Future<List<Task>> getTasks(String userId, String projectId, String token) async {
+  Future<List<Task>> getTasks( String projectId, String token) async {
     List<Task> allTasks = [];
     // state = const LoadingState();
-    final res = await restClient.getAllTasks(userId,projectId, token);
+    final res = await restClient.getAllTasks(projectId, token);
     res.fold((L) {
       state = TaskErrorState(L);
       Fluttertoast.showToast(msg: L);

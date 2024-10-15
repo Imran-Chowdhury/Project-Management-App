@@ -22,7 +22,7 @@ class Project {
 
     return Project(
       id: projectJson['id'],
-      name:  projectJson['project_name'],
+      name: projectJson['project_name'],
       description: projectJson['description'],
       date: projectJson['created_on'],
       );

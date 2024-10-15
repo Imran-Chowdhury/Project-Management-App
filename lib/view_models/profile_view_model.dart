@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project_management_app/base_state/profile_state.dart';
 import 'package:project_management_app/models/profile_model/profile_model.dart';
 import 'package:project_management_app/network/rest_client.dart';
+import 'package:project_management_app/view_models/search_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../views/home_view.dart';
@@ -16,13 +17,16 @@ import '../views/signin_view.dart';
 
 
 final profileViewModelProvider = StateNotifierProvider((ref) {
-  return ProfileViewModelNotifier(restClient: ref.read(restClientProvider));
+  return ProfileViewModelNotifier(
+      restClient: ref.read(restClientProvider),
+  ref: ref);
 });
 
 class ProfileViewModelNotifier extends StateNotifier<ProfileState>{
-  ProfileViewModelNotifier({required this.restClient}) : super(const ProfileInitialState());
+  ProfileViewModelNotifier({required this.restClient, required this.ref}) : super(const ProfileInitialState());
 
   RestClient restClient;
+  Ref ref;
 
   Future<void> logIn(String userName, String passWord, BuildContext context) async {
     // Data to be sent to the API
@@ -180,11 +184,7 @@ class ProfileViewModelNotifier extends StateNotifier<ProfileState>{
 
         // Reset the state to the initial profile state
         state = const  ProfileInitialState();
-        // await Navigator.pushAndRemoveUntil(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => SignInScreen()),
-        //       (route) => false, // This ensures the back button will exit the app
-        // );
+        ref.read(searchProvider.notifier).resetState();
 
         // Optionally, show a success message
         Fluttertoast.showToast(msg: 'Logged out successfully');

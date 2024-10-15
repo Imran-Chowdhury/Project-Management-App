@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/project_model/project_model.dart';
 
-final projectProvider = StateNotifierProvider<SearchNotifier, List<Project>>((ref) {
+final searchProvider = StateNotifierProvider<SearchNotifier, List<Project>>((ref) {
   return SearchNotifier();
 });
 
@@ -12,6 +12,10 @@ class SearchNotifier extends StateNotifier<List<Project>> {
 
 
   SearchNotifier() : super([]);
+
+  void resetState(){
+    state = [];
+  }
 
 
 
