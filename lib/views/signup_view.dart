@@ -31,6 +31,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final profileState = ref.watch(profileViewModelProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor:const Color(0XFFD3D3D3),
+      ),
       backgroundColor: const Color(0XFFffffff),
       body: SingleChildScrollView(
         child: Padding(
@@ -42,7 +45,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Image.asset(
-                  'assets/images/signup.png', // Your image path
+                  'assets/images/signUp.png', // Your image path
                   height: height * .5, // Adjust the height as needed
                 ),
                 SizedBox(height: height * .05),
@@ -72,7 +75,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   child: CustomButton(
                     screenHeight: height,
                     buttonName: 'SignUp',
-                    buttonColor: const Color(0xFF00bfa6),
+                    buttonColor: const Color(0xFFffc801),
                     icon: const Icon(
                       Icons.app_registration_outlined,
                       color: Colors.white,

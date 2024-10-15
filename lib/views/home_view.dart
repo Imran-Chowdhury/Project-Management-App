@@ -96,8 +96,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
      child: Scaffold(
        backgroundColor: Colors.white,
        appBar: AppBar(
-         title: Text('Projects',style: TextStyle(fontWeight: FontWeight.bold),),
-         backgroundColor: Color(0XFFD3D3D3),
+         title:const Text('Projects',style: TextStyle(fontWeight: FontWeight.bold),),
+         backgroundColor:const Color(0XFFD3D3D3),
          // leading: IconButton(
          //   icon: const Icon(Icons.arrow_back_outlined),
          //   onPressed: () {  },

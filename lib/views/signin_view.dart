@@ -45,7 +45,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Image.asset(
-                  'assets/images/signin.png', // Your image path
+                  'assets/images/login.png', // Your image path
                   height: height * 0.5, // Adjust the height as needed
                 ),
                 SizedBox(height: height * 0.0001),
@@ -75,7 +75,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   child: CustomButton(
                     screenHeight: height,
                     buttonName: 'Sign In',
-                    buttonColor: const Color(0xFF00bfa6),
+                    buttonColor: const Color(0xFFffc801),
                     icon: const Icon(
                       Icons.login_outlined,
                       color: Colors.white,

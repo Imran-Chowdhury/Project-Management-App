@@ -401,7 +401,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                     borderRadius: BorderRadius.circular(20.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: const Color(0XFFAEBE25),
+                        color:const Color(0XFFF5F5DC),
                         // color:  Colors.blue,
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -414,14 +414,14 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
 
                         title: Text(
                           taskList[index].taskTitle,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                         ),
                         subtitle: const Column(
                           children: [
                             Row(
                               children: <Widget>[
-                                Icon( Icons.priority_high, color: Colors.yellow),
-                                Text(" Priority: High", style: TextStyle(color: Colors.white)),
+                                Icon( Icons.priority_high, color: Colors.grey),
+                                Text(" Priority: High", style: TextStyle(color: Colors.black)),
 
                               ],
                             ),
@@ -430,9 +430,9 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                             ),
                             Row(
                               children: <Widget>[
-                                Icon(Icons.calendar_today, color: Colors.yellow, size: 20,),
+                                Icon(Icons.calendar_today, color: Colors.grey, size: 20,),
 
-                                Text(" Put deadline here", style: TextStyle(color: Colors.white)),
+                                Text(" Put deadline here", style: TextStyle(color: Colors.black)),
                               ],
                             ),
                           ],
