@@ -3,7 +3,7 @@
         
 
 
-        android:label="project_management_app"
+        android:label="ProManage"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
