@@ -54,11 +54,11 @@ class ProfileViewModelNotifier extends StateNotifier<ProfileState>{
 
         // Save profile to shared preferences (you can handle this later)
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('profile', jsonEncode(R));
+        await prefs.setString('profile', jsonEncode(R));
 
         Fluttertoast.showToast(msg: 'Welcome');
         state = ProfileSuccessState(data: profile!);
-        Navigator.pushReplacement(
+        await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => HomeScreen(),

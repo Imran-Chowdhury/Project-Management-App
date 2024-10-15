@@ -68,11 +68,6 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
           title: const Text('Tasks',
             style: TextStyle(fontWeight: FontWeight.bold),),
           backgroundColor: const Color(0XFFD3D3D3),
-          // leading: IconButton(
-          //   icon: const Icon(Icons.arrow_back_outlined),
-          //   onPressed: () {  },
-          // ),
-
         ),
         backgroundColor: Colors.white,
         body: PageView(
@@ -145,46 +140,6 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
             PieChartScreen(projectName: widget.projectName,listOfTasks: widget.taskList,),
           ],
         ),
-
-
-        // Stack( // Wrap the Column with a Stack
-        //   children: [
-        //     // BackgroudContainer(image: "assets/images/tasks.jpg",),
-        //     // BackgroudContainer(),
-        //     Column(
-        //       children: [
-        //        const SizedBox(height: 20,),
-        //         Align(
-        //           alignment: Alignment.topCenter,
-        //           child: Center(
-        //             child: Text(
-        //               widget.projectName,
-        //               style: const TextStyle(
-        //                 color: Colors.black45,
-        //                 fontSize: 30.0,
-        //                 fontWeight: FontWeight.bold
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //         // (taskState is TaskSuccessState&&taskState.nameOfProject == projectName)?tasks(taskState.data): tasks(taskList),
-        //         (taskState is TaskSuccessState) ? tasks(taskState.data,taskController) : tasks(
-        //             widget.taskList,taskController),
-        //         //  tasks(taskList),
-        //
-        //       ],
-        //     ),
-        //     Positioned(
-        //       bottom: 16.0,
-        //       right: 20.0,
-        //       child: Padding(
-        //         padding: const EdgeInsets.all(16.0),
-        //         child: add(context, formKey, taskController, widget.taskList,
-        //             widget.projectName, selectedDate!),
-        //       ),
-        //     ),
-        //   ],
-        // ),
       ),
     );
   }
@@ -201,171 +156,15 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
           context: context,
           builder: (BuildContext context) {
             TextEditingController titleController = TextEditingController();
-            // TextEditingController descriptionController = TextEditingController();
-
-            return
-              // AlertDialog(
-              //   title: const Text('Add a new task'),
-              //   contentPadding: const EdgeInsets.all(24),
-              //   content: Form(
-              //     key: formKey,
-              //     child: Column(
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         TextFormField(
-              //           controller: titleController,
-              //           decoration: const InputDecoration(
-              //             hintText: 'Enter Task',
-              //           ),
-              //           validator: (value) {
-              //             if (value!.isEmpty) {
-              //               return 'Please enter a task';
-              //             }
-              //             return null;
-              //           },
-              //         ),
-              //         const SizedBox(height: 16),
-              //         Column(
-              //           crossAxisAlignment: CrossAxisAlignment.start,
-              //           children: [
-              //             const Text("Priority"),
-              //             RadioListTile<String>(
-              //               title: const Text('High'),
-              //               value: 'High',
-              //               groupValue: 'High',
-              //               onChanged: (value) {
-              //               //   setState(() {
-              //               //     priority = value!;
-              //               //   });
-              //               },
-              //             ),
-              //             RadioListTile<String>(
-              //               title: const Text('Medium'),
-              //               value: 'Medium',
-              //               groupValue: 'Medium',
-              //               onChanged: (value) {
-              //                 // setState(() {
-              //                 //   _priority = value!;
-              //                 // });
-              //               },
-              //             ),
-              //             RadioListTile<String>(
-              //               title: const Text('Low'),
-              //               value: 'Low',
-              //               groupValue: 'Low',
-              //               onChanged: (value) {
-              //                 // setState(() {
-              //                 //   _priority = value!;
-              //                 // });
-              //               },
-              //             ),
-              //           ],
-              //         ),
-              //         const SizedBox(height: 16),
-              //         Row(
-              //           children: [
-              //             Expanded(
-              //               child: Text(
-              //                 selectedDate == null
-              //                     ? 'No deadline selected'
-              //                     : 'Deadline: ${DateFormat.yMd().format(selectedDate!)}',
-              //               ),
-              //             ),
-              //             TextButton(
-              //               onPressed: () async {
-              //                 DateTime? pickedDate = await showDatePicker(
-              //                   context: context,
-              //                   initialDate: DateTime.now(),
-              //                   firstDate: DateTime.now(),
-              //                   lastDate: DateTime(2101),
-              //                 );
-              //                 if (pickedDate != null) {
-              //                   setState(() {
-              //                     selectedDate = pickedDate;
-              //                   });
-              //                 }
-              //               },
-              //               child: const Text('Select deadline'),
-              //             ),
-              //           ],
-              //         ),
-              //       ],
-              //     ),
-              //   ),
 
 
-
-              TaskDialog(
+            return TaskDialog(
                   taskList: widget.taskList,
                   projectId: widget.projectId.toString(),
                   accessToken: widget.accessToken,
                   taskController: taskController
               );
 
-
-            //   AlertDialog(
-            //   title: const Text('Add ta new task'),
-            //   contentPadding: const EdgeInsets.all(24),
-            //   // Adjust padding for bigger size
-            //   content: Form(
-            //     key: formKey,
-            //     // mainAxisSize: MainAxisSize.min,
-            //     child: Column(
-            //       mainAxisSize: MainAxisSize.min,
-            //       children: [
-            //         TextFormField(
-            //           controller: titleController,
-            //           decoration: const InputDecoration(
-            //             hintText: 'Enter Task',
-            //           ),
-            //           validator: (value) {
-            //             if (value!.isEmpty) {
-            //               return 'Please enter a task';
-            //             }
-            //             return null;
-            //           },
-            //         ),
-            //         const SizedBox(height: 16),
-            //
-            //       ],
-            //     ),
-            //   ),
-            //   actions: <Widget>[
-            //     TextButton(
-            //       onPressed: () {
-            //         Navigator.of(context).pop();
-            //       },
-            //       child: const Text('Cancel'),
-            //     ),
-            //
-            //     TextButton(
-            //       onPressed: () {
-            //         if (formKey.currentState!.validate()) {
-            //           // Validation passed, proceed with saving
-            //
-            //
-            //           String title = titleController.text.trim();
-            //
-            //
-            //           Map<String, dynamic> newTask = {
-            //             "task_name": title,
-            //             "completed": false,
-            //             "deadline": '',
-            //
-            //
-            //           };
-            //
-            //
-            //           taskController.addTask(widget.taskList, newTask,
-            //               widget.projectId.toString(), widget.accessToken);
-            //
-            //           Navigator.of(context).pop();
-            //         }
-            //       },
-            //       child: const Text('Save'),
-            //     ),
-            //   ],
-            // );
           },
         );
       },
@@ -388,7 +187,7 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                       widget.projectId.toString());
                 },
                 checkColor: Colors.white,
-                activeColor: Colors.pink,
+                activeColor: const Color(0XFFD3D3D3),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -416,23 +215,25 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
                           taskList[index].taskTitle,
                           style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                         ),
-                        subtitle: const Column(
+                        subtitle:  Column(
                           children: [
-                            Row(
+                           const Row(
                               children: <Widget>[
                                 Icon( Icons.priority_high, color: Colors.grey),
                                 Text(" Priority: High", style: TextStyle(color: Colors.black)),
 
                               ],
                             ),
-                            SizedBox(
+                          const  SizedBox(
                               height: 10,
                             ),
                             Row(
                               children: <Widget>[
-                                Icon(Icons.calendar_today, color: Colors.grey, size: 20,),
-
-                                Text(" Put deadline here", style: TextStyle(color: Colors.black)),
+                               const Icon(Icons.calendar_today, color: Colors.grey, size: 20,),
+                                const  SizedBox(
+                                  width: 10,
+                                ),
+                                Text(taskList[index].deadline, style: const TextStyle(color: Colors.black)),
                               ],
                             ),
                           ],

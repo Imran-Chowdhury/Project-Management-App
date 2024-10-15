@@ -67,7 +67,8 @@ class AuthChecker extends ConsumerWidget {
           return HomeScreen();
         } else {
           // If no user is found, show the LoginScreen
-          return SignInScreen();
+          // return SplashScreen();
+            return SignInScreen();
         }
       },
     );

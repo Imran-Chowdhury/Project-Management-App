@@ -3,30 +3,59 @@
 
 
 
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project_management_app/base_state/base_state.dart';
 import 'package:project_management_app/models/project_model/project_model.dart';
 import 'package:project_management_app/network/rest_client.dart';
+import 'package:project_management_app/view_models/profile_view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../base_state/profile_state.dart';
 
 
 
 final projectViewModelProvider = StateNotifierProvider((ref) {
-  return ProjectViewModelNotifier(restClient: ref.read(restClientProvider));
+  return ProjectViewModelNotifier(
+      restClient: ref.read(restClientProvider),
+    ref: ref
+  );
 });
 
 
 
 class ProjectViewModelNotifier extends StateNotifier<BaseState> {
-  ProjectViewModelNotifier({required this.restClient})
+  ProjectViewModelNotifier({required this.restClient, required this.ref})
       : super(const InitialState());
 
   RestClient restClient;
+  Ref ref;
 
   Future<List<Project>> getProjects() async {
+  // Future<List<Project>> getProjects(String accessToken) async {
     List<Project> allProjects = [];
-    // state = const LoadingState();
-    final res = await restClient.getAllProjects();
+    String accessToken = '';
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Retrieve the JSON-encoded string from SharedPreferences
+    String? profileString = prefs.getString('profile');
+
+    if (profileString != null) {
+      // Decode the string back to a Map
+      Map<String, dynamic> profileMap = jsonDecode(profileString);
+
+      accessToken = await profileMap['tokens']['access'];
+
+    }
+
+    state = const LoadingState();
+
+
+
+    final res = await restClient.getAllProjects(accessToken);
     res.fold((L) {
       state = ErrorState(L);
       Fluttertoast.showToast(msg: L);
@@ -44,9 +73,9 @@ class ProjectViewModelNotifier extends StateNotifier<BaseState> {
   }
 
 
-  Future<void> addProject(List<Project> listOfProjects, Map<String,dynamic> data)async{
+  Future<void> addProject(List<Project> listOfProjects, Map<String,dynamic> data, String accessToken)async{
     state = const LoadingState();
-    final res = await restClient.addProject(data);
+    final res = await restClient.addProject(data, accessToken);
 
     res.fold((L) {
       state = ErrorState(L);
@@ -66,9 +95,10 @@ class ProjectViewModelNotifier extends StateNotifier<BaseState> {
 
   }
 
-  Future<void> updateProject(List<Project> listOfProjects,int index, Map<String,dynamic> data, String projectID)async{
+  Future<void> updateProject(List<Project> listOfProjects,int index, Map<String,dynamic> data, String projectID,String accessToken)async{
     state = const LoadingState();
-    final res = await restClient.updateProject(data,projectID);
+
+    final res = await restClient.updateProject(data,projectID,accessToken);
 
     res.fold((L) {
       state = ErrorState(L);
@@ -89,9 +119,9 @@ class ProjectViewModelNotifier extends StateNotifier<BaseState> {
 
   }
 
-  Future<void> deleteProject(List<Project> listOfProjects,int index, String projectID)async{
+  Future<void> deleteProject(List<Project> listOfProjects,int index, String projectID,String accessToken)async{
     state = const LoadingState();
-    final res = await restClient.deleteProject(projectID);
+    final res = await restClient.deleteProject(projectID,accessToken);
 
 
     res.fold((L) {

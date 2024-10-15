@@ -7,22 +7,25 @@ class Task {
   final String date;
   final bool completed;
   final projectId;
+  final deadline;
 
-  Task({required this.id, required this.taskTitle, required this.date, required this.completed, required this.projectId});
+  Task({required this.deadline, required this.id, required this.taskTitle, required this.date, required this.completed, required this.projectId});
 
   Task copyWith({
     int? id,
     String? nameOfTask,
     String? createdOn,
     bool? completed,
-    final projectId,
+    projectId,
+    deadline
   }) {
     return Task(
       id: id ?? this.id,
       taskTitle: nameOfTask ?? taskTitle,
       date: createdOn ?? date,
       completed: completed ?? this.completed,
-      projectId: projectId ?? this.projectId
+      projectId: projectId ?? this.projectId,
+      deadline: deadline ?? this.deadline,
     );
   }
 
@@ -33,7 +36,8 @@ factory Task.fromjson(Map<String, dynamic> taskJson ){
       taskTitle: taskJson['task_name'],
       date: taskJson['created_on'],
       completed:taskJson['completed'],
-      projectId: taskJson['project_id']
+      projectId: taskJson['project_id'],
+      deadline: taskJson['deadline'],
   );
 }
 

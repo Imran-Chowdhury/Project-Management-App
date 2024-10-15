@@ -98,10 +98,92 @@ class RestClient {
   }
 
 /////////////////////////////////////Project request//////////////////////////////////
-  Future<Either<String, List<dynamic>>> getAllProjects() async {
+//   Future<Either<String, List<dynamic>>> getAllProjects() async {
+//
+//     String getProjectUrl = '${API.baseUrl}get_project/';
+//     Response response = await http.get(Uri.parse(getProjectUrl));
+//
+//     if (response.statusCode == 200) {
+//       List<dynamic> body = json.decode(response.body);
+//       print(body);
+//       return Right(body);
+//     } else {
+//       return const Left('Failed to load projects');
+//
+//     }
+//
+//   }
+//
+//   Future<Either<String, Map<String, dynamic>>> addProject( Map<String, dynamic> data,) async {
+//
+//     String addProjectUrl = '${API.baseUrl}add_project/';
+//
+//
+//   final response = await http.post(
+//     Uri.parse(addProjectUrl),
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//     },
+//
+//     body: jsonEncode(data),
+//   );
+//
+//   if (response.statusCode == 201) {
+//     Map<String, dynamic> body = json.decode(response.body);
+//     return Right(body);
+//   } else {
+//     return const  Left('Failed to add a project');
+//   }
+// }
+//
+//
+//   Future<Either<String, Map<String, dynamic>>> updateProject( Map<String, dynamic> data,String projectId) async {
+//     String updateTaskUrl =  '${API.baseUrl}update_project/$projectId';
+//     final response = await http.put(
+//         Uri.parse(updateTaskUrl),
+//         headers: <String, String>{
+//           'Content-Type': 'application/json; charset=UTF-8',
+//         },
+//         body: jsonEncode(data));
+//
+//     if (response.statusCode == 200) {
+//       Map<String, dynamic> body = json.decode(response.body);
+//       return Right(body);
+//     }else {
+//       return const  Left('Failed to add a project');
+//     }
+//   }
+//
+//   Future<Either<String,String>> deleteProject(String projectId) async {
+//     final String apiUrl = '${API.baseUrl}delete_project/$projectId';
+//
+//     final response = await http.delete(
+//       Uri.parse(apiUrl),
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     );
+//
+//     if (response.statusCode == 204) {
+//       return const Right('Project deleted successfully');
+//       // print('Task deleted successfully');
+//     } else {
+//       return const Left('Failed to delete project');
+//       // print('Failed to delete task: ${response.statusCode}');
+//     }
+//   }
 
+  // Get all projects
+  Future<Either<String, List<dynamic>>> getAllProjects(String token) async {
     String getProjectUrl = '${API.baseUrl}get_project/';
-    Response response = await http.get(Uri.parse(getProjectUrl));
+
+    final response = await http.get(
+      Uri.parse(getProjectUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
 
     if (response.statusCode == 200) {
       List<dynamic> body = json.decode(response.body);
@@ -109,69 +191,70 @@ class RestClient {
       return Right(body);
     } else {
       return const Left('Failed to load projects');
-
     }
-
   }
 
-  Future<Either<String, Map<String, dynamic>>> addProject( Map<String, dynamic> data,) async {
-
+// Add a project
+  Future<Either<String, Map<String, dynamic>>> addProject(Map<String, dynamic> data, String token) async {
     String addProjectUrl = '${API.baseUrl}add_project/';
 
+    final response = await http.post(
+      Uri.parse(addProjectUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data),
+    );
 
-  final response = await http.post(
-    Uri.parse(addProjectUrl),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-
-    body: jsonEncode(data),
-  );
-
-  if (response.statusCode == 201) {
-    Map<String, dynamic> body = json.decode(response.body);
-    return Right(body);
-  } else {
-    return const  Left('Failed to add a project');
+    if (response.statusCode == 201) {
+      Map<String, dynamic> body = json.decode(response.body);
+      return Right(body);
+    } else {
+      return const Left('Failed to add a project');
+    }
   }
-}
 
+// Update a project
+  Future<Either<String, Map<String, dynamic>>> updateProject(Map<String, dynamic> data, String projectId, String token) async {
+    String updateProjectUrl = '${API.baseUrl}update_project/$projectId';
 
-  Future<Either<String, Map<String, dynamic>>> updateProject( Map<String, dynamic> data,String projectId) async {
-    String updateTaskUrl =  '${API.baseUrl}update_project/$projectId';
     final response = await http.put(
-        Uri.parse(updateTaskUrl),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(data));
+      Uri.parse(updateProjectUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data),
+    );
 
     if (response.statusCode == 200) {
       Map<String, dynamic> body = json.decode(response.body);
       return Right(body);
-    }else {
-      return const  Left('Failed to add a project');
+    } else {
+      return const Left('Failed to update project');
     }
   }
 
-  Future<Either<String,String>> deleteProject(String projectId) async {
-    final String apiUrl = '${API.baseUrl}delete_project/$projectId';
+// Delete a project
+  Future<Either<String, String>> deleteProject(String projectId, String token) async {
+    String apiUrl = '${API.baseUrl}delete_project/$projectId';
 
     final response = await http.delete(
       Uri.parse(apiUrl),
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       },
     );
 
     if (response.statusCode == 204) {
       return const Right('Project deleted successfully');
-      // print('Task deleted successfully');
     } else {
       return const Left('Failed to delete project');
-      // print('Failed to delete task: ${response.statusCode}');
     }
   }
+
 
 
 /////////////////////////////////////Task requests/////////////////////////////////////////////

@@ -39,38 +39,58 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 
-   List<Project> projectList = [];
-   String fileName = 'project_file';
+  List<Project> projectList = [];
+  String fileName = 'project_file';
+  int userId = 0;
+  String userName = '';
+  String refreshToken = '';
+  String accessToken = '';
+
 
   @override
   void initState() {
-
     super.initState();
-
-    print('this is initstate');
-
-   getProjects();
-   // print(projectList);
+    getProjects();
   }
-  Future<void> getProjects()async{
-    final projectController =  ref.read(projectViewModelProvider.notifier);
+
+
+  Future<void> getProjects() async {
+    final projectController = ref.read(projectViewModelProvider.notifier);
     projectList = await projectController.getProjects();
   }
 
+  // Future<void> getProjects() async {
+  //   final projectController = ref.read(projectViewModelProvider.notifier);
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //
+  //   // Retrieve the JSON-encoded string from SharedPreferences
+  //   String? profileString = prefs.getString('profile');
+  //
+  //   if (profileString != null) {
+  //     // Decode the string back to a Map
+  //     Map<String, dynamic> profileMap = await jsonDecode(profileString);
+  //     userName = await profileMap['name'];
+  //     accessToken = await profileMap['tokens']['access'];
+  //     refreshToken = await profileMap['tokens']['refresh'];
+  //     userId = await profileMap['id'];
+  //     projectList = await projectController.getProjects(accessToken);
+  //   }
+  // }
 
- 
+
 
 
   @override
   Widget build(BuildContext context) {
 
-     int userId = 0;
-     String userName = '';
-     String refreshToken = '';
-     String accessToken = '';
+      // int userId = 0;
+      // String userName = '';
+      // String refreshToken = '';
+      // String accessToken = '';
      final projectState = ref.watch( projectViewModelProvider);
      final projectController = ref.watch( projectViewModelProvider.notifier);
      final profileState = ref.read(profileViewModelProvider);
+
      if(profileState is ProfileSuccessState){
        userName = profileState.data.name;
        refreshToken = profileState.data.tokens['refresh'];
@@ -80,6 +100,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
        print(userId);
        print(accessToken);
      }
+
 
     DateTime now = DateTime.now();
 
@@ -170,147 +191,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                  ],
                ),
              ),
-           //   Padding(
-           //   padding: EdgeInsets.all(20.0),
-           //   //   padding: EdgeInsets.only(top:  height*0.5),
-           //   child: (projectState is LoadingState) ?
-           //   const Center(
-           //     child: CircularProgressIndicator(),
-           //   )  :    Stack(
-           //     children: [
-           //       Column(
-           //         children: [
-           //
-           //           Row(
-           //             children: [
-           //              const Icon(
-           //                   Icons.person,
-           //               size: 70,),
-           //
-           //
-           //               const SizedBox(width: 10.0,),
-           //               Column(
-           //                 children: [
-           //                   Text('Hi, $userName',
-           //                     style: const TextStyle(
-           //                         fontWeight: FontWeight.bold, fontSize: 20.0),
-           //                   ),
-           //                   Text(formattedDate),
-           //                 ],
-           //               ),
-           //               const SizedBox(width: 120.0,),
-           //               IconButton(
-           //                 iconSize: 30.0, // Specify the size directly
-           //                 onPressed: () async {
-           //                   // Perform logout action here
-           //                   await ref.read(profileViewModelProvider.notifier).logout(refreshToken,context);
-           //
-           //                   // After logout, navigate to SignInScreen or any desired screen
-           //                  await Navigator.pushAndRemoveUntil(
-           //                     context,
-           //                     MaterialPageRoute(builder: (context) => SignInScreen()),
-           //                         (route) => false, // This ensures the back button will exit the app
-           //                   );
-           //                 },
-           //                 icon: const Icon(
-           //                   Icons.exit_to_app_outlined,
-           //                 ),
-           //               )
-           //
-           //
-           //             ],
-           //           ),
-           //
-           //           const SizedBox(height: 20.0,),
-           //
-           //           // headings('Projects'),
-           //
-           //           // Container(
-           //           //   width: 250,
-           //           //   height: 150,
-           //           //   color: Colors.black ,
-           //           // ),
-           //
-           //
-           //
-           //
-           //           (projectState is SuccessState)?horizontalSlider(projectState.data, projectController):
-           //           horizontalSlider(projectList,projectController ),
-           //
-           //
-           //
-           //
-           //           const SizedBox(height: 40.0,),
-           //
-           //           // headings("Announcements"),
-           //
-           //
-           //
-           //           // AnnouncementWidget(width:width, height: height,),
-           //         ],
-           //       ),
-           //
-           //
-           //       if (projectState is LoadingState) // Conditionally display CircularProgressIndicator
-           //         const Center(
-           //           child: CircularProgressIndicator(),
-           //         ),
-           //
-           //
-           //
-           //     ],
-           //   ),
-           // ),
+
          ],
        ),
 
-        // bottomNavigationBar: BottomAppBar(
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //     children: [
-        //       IconButton(
-        //         icon: const Icon(Icons.home),
-        //         onPressed: () {
-        //           // Handle press
-        //         },
-        //       ),
-        //       IconButton(
-        //         icon: const Icon(Icons.search),
-        //         onPressed: () {
-        //           // Handle press
-        //           Navigator.push(
-        //             context,
-        //             MaterialPageRoute(builder: (context) =>  SearchScreen(allProjects: projectList,)),
-        //           );
-        //         },
-        //       ),
-        //       const SizedBox(width: 40), // This creates space for the round button
-        //       IconButton(
-        //         icon: const Icon(Icons.notifications),
-        //         onPressed: () {
-        //           // Handle press
-        //           Navigator.push(
-        //             context,
-        //             MaterialPageRoute(builder: (context) =>  NotificationScreen()),
-        //           );
-        //
-        //         },
-        //       ),
-        //       IconButton(
-        //         icon: const Icon(Icons.settings),
-        //         onPressed: ()async {
-        //           // Handle press
-        //           SharedPreferences prefs = await SharedPreferences.getInstance();
-        //           await prefs.clear();
-        //
-        //         },
-        //       ),
-        //     ],
-        //   ),
-        // ),
+
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(right: 25,bottom: 20),
-          child: add(context,_formKey, projectController, projectState,projectList,userId.toString()),
+          child: add(context,_formKey, projectController, projectState,projectList,userId.toString(),accessToken),
         ),
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
@@ -318,7 +206,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
 
-Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNotifier projectController, final projectState,List<Project> list, String userId){
+Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNotifier projectController, final projectState,List<Project> list, String userId, String accesstoken){
   // List<Project> list = [];
     return  FloatingActionButton(
       backgroundColor: const Color(0XFFD3D3D3),
@@ -377,7 +265,7 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNo
                   child: const Text('Cancel'),
                 ),
 
-                
+
                 TextButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
@@ -393,7 +281,7 @@ Widget add(BuildContext context,GlobalKey<FormState> formKey, ProjectViewModelNo
                       };
 
 
-                      projectController.addProject(list, newProject);
+                      projectController.addProject(list, newProject,accesstoken);
 
                       Navigator.of(context).pop();
                     }
@@ -427,7 +315,7 @@ Widget horizontalSlider(String accessToken,int userId, double height, List<Proje
           return GestureDetector(
             onLongPress: (){
               showOptions(context, listOfProjects[index].name, listOfProjects[index].description,
-                  projectController, listOfProjects, index, listOfProjects[index].id);
+                  projectController, listOfProjects, index, listOfProjects[index].id,accessToken);
             },
             onTap: (){
 
@@ -556,7 +444,7 @@ Widget headings(String projectOrTask) {
 
 
    void showOptions(BuildContext context,String project,String description, ProjectViewModelNotifier projectController,
-       List<Project> listOfProjects,int index,  int projectID) {
+       List<Project> listOfProjects,int index,  int projectID,String accessToken) {
      showModalBottomSheet(
        context: context,
        builder: (BuildContext context) {
@@ -567,7 +455,7 @@ Widget headings(String projectOrTask) {
                title: const Text('Delete'),
                onTap: () {
                  // Handle delete logic
-                 projectController.deleteProject(listOfProjects, index, projectID.toString());
+                 projectController.deleteProject(listOfProjects, index, projectID.toString(),accessToken);
                  Navigator.pop(context);
                },
              ),
@@ -626,7 +514,7 @@ Widget headings(String projectOrTask) {
 
 
 
-                 projectController.updateProject(listOfProjects, index, updatedTask, taskID.toString());
+                 projectController.updateProject(listOfProjects, index, updatedTask, taskID.toString(),accessToken);
 
                  Navigator.of(context).pop();
                },
