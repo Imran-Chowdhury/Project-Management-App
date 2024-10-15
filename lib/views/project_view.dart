@@ -136,8 +136,8 @@ class _ProjectScreenState extends ConsumerState<ProjectScreen> {
               ],
             ),
 
-            (taskState is TaskSuccessState) ? PieChartScreen(projectName: widget.projectName,listOfTasks: taskState.data,):
-            PieChartScreen(projectName: widget.projectName,listOfTasks: widget.taskList,),
+            (taskState is TaskSuccessState) ? PieChartScreen(projectName: widget.projectName,listOfTasks: taskState.data, description:widget.description,):
+            PieChartScreen(projectName: widget.projectName,listOfTasks: widget.taskList,description: widget.description,),
           ],
         ),
       ),
