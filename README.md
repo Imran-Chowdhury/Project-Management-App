@@ -12,17 +12,17 @@ ProManage is a project management app that helps users manage their projects and
 
 ## Screenshots
 
-| SplashScreen                                    | SignInScreen | SignUpScreen |
-|-------------------------------------------------|--------------|--------------|
-| ![SplashScreen](./screenshots/SplashScreen.png) | ![SignInScreen](./screenshots/SignInScreen.png) | ![SignUpScreen](./screenshots/SignUpScreen.png) |
+| SplashScreen                                     | SignInScreen                                     | SignUpScreen                                     |
+|--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
+| ![SplashScreen](./screenshots/SplashScreen.jpeg) | ![SignInScreen](./screenshots/SignInScreen.jpeg) | ![SignUpScreen](./screenshots/SignUpScreen.jpeg) |
 
-| HomeScreen | TaskScreen | ProjectReport |
-|------------|------------|---------------|
-| ![HomeScreen](./screenshots/HomeScreen.png) | ![TaskScreen](./screenshots/TaskScreen.png) | ![ProjectReport](./screenshots/ProjectReport.png) |
+| HomeScreen                                   | TaskScreen                                   | ProjectReport                                      |
+|----------------------------------------------|----------------------------------------------|----------------------------------------------------|
+| ![HomeScreen](./screenshots/HomeScreen.jpeg) | ![TaskScreen](./screenshots/TaskScreen.jpeg) | ![ProjectReport](./screenshots/ProjectReport.jpeg) |
 
-| SearchScreen |
-|--------------|
-| ![SearchScreen](./screenshots/SearchScreen.png) |
+| SearchScreen                                     |
+|--------------------------------------------------|
+| ![SearchScreen](./screenshots/SearchScreen.jpeg) |
 
 ## Installation
 
