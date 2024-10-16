@@ -12,17 +12,62 @@ ProManage is a project management app that helps users manage their projects and
 
 ## Screenshots
 
-| SplashScreen                                     | SignInScreen                                     | SignUpScreen                                     |
-|--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
-| ![SplashScreen](./screenshots/SplashScreen.jpeg) | ![SignInScreen](./screenshots/SignInScreen.jpeg) | ![SignUpScreen](./screenshots/SignUpScreen.jpeg) |
+[//]: # (| SplashScreen                                     | SignInScreen                                     | SignUpScreen                                     |)
 
-| HomeScreen                                   | TaskScreen                                   | ProjectReport                                      |
-|----------------------------------------------|----------------------------------------------|----------------------------------------------------|
-| ![HomeScreen](./screenshots/HomeScreen.jpeg) | ![TaskScreen](./screenshots/TaskScreen.jpeg) | ![ProjectReport](./screenshots/ProjectReport.jpeg) |
+[//]: # (|--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|)
 
-| SearchScreen                                     |
-|--------------------------------------------------|
-| ![SearchScreen](./screenshots/SearchScreen.jpeg) |
+[//]: # (| ![SplashScreen]&#40;./screenshots/SplashScreen.jpeg&#41; | ![SignInScreen]&#40;./screenshots/SignInScreen.jpeg&#41; | ![SignUpScreen]&#40;./screenshots/SignUpScreen.jpeg&#41; |)
+
+[//]: # ()
+[//]: # (| HomeScreen                                   | TaskScreen                                   | ProjectReport                                      |)
+
+[//]: # (|----------------------------------------------|----------------------------------------------|----------------------------------------------------|)
+
+[//]: # (| ![HomeScreen]&#40;./screenshots/HomeScreen.jpeg&#41; | ![TaskScreen]&#40;./screenshots/TaskScreen.jpeg&#41; | ![ProjectReport]&#40;./screenshots/ProjectReport.jpeg&#41; |)
+
+[//]: # ()
+[//]: # (| SearchScreen                                     |)
+
+[//]: # (|--------------------------------------------------|)
+
+[//]: # (| ![SearchScreen]&#40;./screenshots/SearchScreen.jpeg&#41; |)
+
+<table>
+  <tr>
+    <td style="text-align:center">
+      <img src="screenshots/SplashScreen.jpeg" alt="SplashScreen" width="300" height="500"/>
+      <p style="text-align:center">SplashScreen</p>
+    </td>
+    <td style="text-align:center">
+      <img src="screenshots/SignInScreen.jpeg" alt="SignInScreen" width="300" height="500"/>
+      <p style="text-align:center">Sign In</p>
+    </td>
+    <td style="text-align:center">
+      <img src="screenshots/SignUpScreen.jpeg" alt="SignUpScreen" width="300" height="500"/>
+      <p style="text-align:center">Sign Up</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align:center">
+      <img src="screenshots/HomeScreen.jpeg" alt="HomeScreen" width="300" height="500"/>
+      <p style="text-align:center">Home Screen</p>
+    </td>
+    <td style="text-align:center">
+      <img src="screenshots/TaskScreen.jpeg" alt="TaskScreen" width="300" height="500"/>
+      <p style="text-align:center">Task Screen</p>
+    </td>
+    <td style="text-align:center">
+      <img src="screenshots/ProjectReport.jpeg" alt="ProjectReport" width="300" height="500"/>
+      <p style="text-align:center">Project Report</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align:center">
+      <img src="screenshots/SearchScreen.jpeg" alt="SearchScreen" width="300" height="500"/>
+      <p style="text-align:center">Search Screen</p>
+    </td>
+  </tr>
+</table>
 
 ## Installation
 
