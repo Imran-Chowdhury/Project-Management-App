@@ -12,26 +12,6 @@ ProManage is a project management app that helps users manage their projects and
 
 ## Screenshots
 
-[//]: # (| SplashScreen                                     | SignInScreen                                     | SignUpScreen                                     |)
-
-[//]: # (|--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|)
-
-[//]: # (| ![SplashScreen]&#40;./screenshots/SplashScreen.jpeg&#41; | ![SignInScreen]&#40;./screenshots/SignInScreen.jpeg&#41; | ![SignUpScreen]&#40;./screenshots/SignUpScreen.jpeg&#41; |)
-
-[//]: # ()
-[//]: # (| HomeScreen                                   | TaskScreen                                   | ProjectReport                                      |)
-
-[//]: # (|----------------------------------------------|----------------------------------------------|----------------------------------------------------|)
-
-[//]: # (| ![HomeScreen]&#40;./screenshots/HomeScreen.jpeg&#41; | ![TaskScreen]&#40;./screenshots/TaskScreen.jpeg&#41; | ![ProjectReport]&#40;./screenshots/ProjectReport.jpeg&#41; |)
-
-[//]: # ()
-[//]: # (| SearchScreen                                     |)
-
-[//]: # (|--------------------------------------------------|)
-
-[//]: # (| ![SearchScreen]&#40;./screenshots/SearchScreen.jpeg&#41; |)
-
 <table>
   <tr>
     <td style="text-align:center">
@@ -73,11 +53,11 @@ ProManage is a project management app that helps users manage their projects and
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/ProManage.git
+    git clone https://github.com/Imran-Chowdhury/Project-Management-App
     ```
 2. Navigate to the project directory:
     ```bash
-    cd ProManage
+    cd Project-Management-App
     ```
 3. Install dependencies:
     ```bash
@@ -93,7 +73,7 @@ ProManage is a project management app that helps users manage their projects and
 
 - **Flutter:** UI Framework
 - **Django & MySQL:** Backend for user authentication, project, and task management
-- **Charts & Data Visualization:** For project progress reports
+
 
 ## Contribution
 
